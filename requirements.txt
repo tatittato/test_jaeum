@@ -6,3 +6,5 @@ openai
 
 mediapipe
 opencv-python
+sqlalchemy
+pandas

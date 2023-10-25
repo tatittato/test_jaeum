@@ -10,12 +10,7 @@ router = APIRouter(
 
 templates = Jinja2Templates(directory="templates")
 
+@router.get("/statistics/")
+def chart(request: Request):
 
-@router.get("/statistics", response_class=HTMLResponse)
-async def home_page(request: Request):
-    return templates.TemplateResponse(
-        "home.html",
-        {
-            "request": request,
-            "test_text": "hello statistics page"
-        })
+    return templates.TemplateResponse("statistics.html", {"request": request})
