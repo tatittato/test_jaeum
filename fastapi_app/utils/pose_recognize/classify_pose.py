@@ -18,17 +18,17 @@ def classify_pose(landmarks, output_image, fps, frame_height, frame_width, displ
     colors = []  # Initialize an empty list for colors
 
     global frame_count
+# 필요 없음
+    # # 코 좌표, x, y
+    # nose_landmark = landmarks[mp_pose.PoseLandmark.NOSE.value]
 
-    # 코 좌표, x, y
-    nose_landmark = landmarks[mp_pose.PoseLandmark.NOSE.value]
-
-    # shoulder의 midpoint x, y, z 좌표
-    shoulder_x = (landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value][0] + landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value][0]) / 2
-    shoulder_y = (landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value][1] + landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value][1]) / 2
-    shoulder_z = (landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value][2] + landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value][2]) / 2
+    # # shoulder의 midpoint x, y, z 좌표
+    # shoulder_x = (landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value][0] + landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value][0]) / 2
+    # shoulder_y = (landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value][1] + landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value][1]) / 2
+    # shoulder_z = (landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value][2] + landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value][2]) / 2
     
-    # shoulder x, y, z 좌표를 담은 midpoints 리스트
-    midpoints = (shoulder_x, shoulder_y, shoulder_z)
+    # # shoulder x, y, z 좌표를 담은 midpoints 리스트
+    # midpoints = (shoulder_x, shoulder_y, shoulder_z)
 
     # 지윤님 엎드려잠을 위한 z 좌표들
     nose_landmark_z = landmarks[mp_pose.PoseLandmark.NOSE.value][2]
@@ -107,7 +107,7 @@ def classify_pose(landmarks, output_image, fps, frame_height, frame_width, displ
     # 만세포즈 / 오버헤드 -> 어깨, 팔꿈치로 분류
     raiseArm = is_raise_arm(right_shoulder_angle, left_shoulder_angle, right_elbow_angle, left_elbow_angle)
     if raiseArm:
-        labels.append('raiseArm')
+        labels.append('raise_arm')
 
     # 옆으로 잠
     if is_side(left_knee_angle, right_knee_angle, nose_landmark_z, shoulder_left_z, shoulder_right_z):
@@ -119,12 +119,12 @@ def classify_pose(landmarks, output_image, fps, frame_height, frame_width, displ
 
     # 무릎세운 함수
     if is_knee_up(left_knee_z, right_knee_z, labels):
-        labels.append("knee up")
+        labels.append("knee_up")
     else: pass
 
     # 백숙자세 함수
     if is_cross_legs(left_hip_knee_angle, right_hip_knee_angle, labels):
-        labels.append("cross legs")
+        labels.append("cross_legs")
     else: pass
 
     # 정자세 (자세 검사 가장 마지막 if 문)
