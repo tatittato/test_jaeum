@@ -6,3 +6,4 @@ openai
 
 mediapipe
 opencv-python
+SQLAlchemy
