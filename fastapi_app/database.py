@@ -2,12 +2,19 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = "mysql://{}:{}@{}:{}/{}?charset=utf8mb4".format("root", "12341234","127.0.0.1",3306,"jaeum")
+DATABASE_URL = "mysql://{}:{}@{}:{}/{}?charset=utf8mb4".format(
+    "root", "12341234", "127.0.0.1", 3306, "jaeum"
+)
+# Dependency
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # 엔진생성
-engine = create_engine(
-    DATABASE_URL
-)
+engine = create_engine(DATABASE_URL)
 
 # 세션생성
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -33,4 +40,3 @@ except Exception as e:
 finally:
     # 세션을 닫습니다.
     session.close()
-

@@ -1,10 +1,18 @@
 from fastapi.staticfiles import StaticFiles
 
-from fastapi import FastAPI
+
+from fastapi import FastAPI, Depends
+
+from .database import SessionLocal, engine
+
+# from .crud import *
+# from .schemas import *
+# from .model import *
+# from sqlalchemy.orm import Session
 
 from .routers import api_record, api_score, api_statistics, api_timeline
 
-from .views import record, score, statistics, timeline
+from .views import home, record, score, statistics, timeline
 
 tags_metadata = [
     {
@@ -31,8 +39,14 @@ tags_metadata = [
 app = FastAPI(openapi_tags=tags_metadata, title="api", version="0.0.1", )
 
 # routers = [home, ranking, rank, speech]
-routers = [record, score, statistics, timeline, api_record, api_score, api_statistics, api_timeline]
+routers = [home, record, score, statistics, timeline, api_record, api_score, api_statistics, api_timeline]
 for r in routers:
     app.include_router(r.router)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+
+
+
+

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Jaeum - Timeline</title>
+    <link rel="stylesheet" href="../static/css/timeline.css" />
+  </head>
+  <body align="center">
+    <!-- UI 껍딱 + 헤더-->
+    <div>
+      <img src="../static/images/img/bg.png" class="bg" />
+      <button type="button" class="btn menu_btn">
+        <img src="../static/images/img/menu.png" class="menu_img" />
+      </button>
+      <button type="button" class="btn logo_btn">
+        <img src="../static/images/img/logo.png" class="logo_img" />
+      </button>
+      <!-- <button type="button" class="btn settings_btn">
+        <img src="../static/images/img/settings.png" class="menu_img" />
+      </button> -->
+    </div>
+  <div class="all_wrap">
+    <!-- 목표 수면시간 설정 -->
+    <div class="target_time_title">Target Sleep Time</div>
+    <div class="ttt_input_area" align="center">
+      <select class="select_box1">
+        <option value="00">12AM</option>
+        <option value="01">1AM</option>
+        <option value="02">2AM</option>
+        <option value="03">3AM</option>
+        <option value="04">4AM</option>
+      </select>
+      <span class="bar"> - <span>
+      <select class="select_box2">
+        <option value="05">5AM</option>
+        <option value="06">6AM</option>
+        <option value="07">7AM</option>
+        <option value="08" selected>8AM</option>
+        <option value="09">9AM</option>
+        <option value="10">10AM</option>
+      </select>
+    </div>
+
+    <!-- 타임라인 영역 -->
+    <div>
+      <button class="timeline_btn">Daily Sleep Timeline</button>
+      <input type="date" min="2023-01-01" max="2023-12-31" class="select_date" id="dateInput">
+      <div class="timeline_wrap">
+        <canvas id="myChart" width="300" height="200"></canvas>
+      </div>
+    </div>
+
+
+    <button id="toggle-images-button" class="show_img_btn">Show Images</button>
+    <div class="img_wrap">
+      <div id="image-container">
+        {% for item in sleep_event_data %}
+        <div class="image-div">
+            <!-- 이미지 표시 -->
+            <img src="../static/images/{{ item.event_data_path }}.jpg" alt="{{ item.sleep_event }}" width="200" height="200">
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+    <script src="../static/js/timeline.js"></script>
+  </body>
+</html>

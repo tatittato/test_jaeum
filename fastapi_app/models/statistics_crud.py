@@ -27,7 +27,7 @@ def get_sleep_event_data(start, end, db:Session, response_model: schemas.SleepEv
     # 전체 기간동안의 정보를 가져오기
     event_data = (db.query(model.SleepEvent, model.SleepInfo.date)
       .join(model.SleepInfo, model.SleepEvent.sleep_info_id == model.SleepInfo.sleep_info_id)
-      .filter(model.SleepInfo.nickname == 'test1')
+      .filter(model.SleepInfo.nickname == 'test')
       .filter(model.SleepInfo.date <= end)
       .distinct()  # 모든 컬럼 조합의 중복 제거
       .order_by(model.SleepEvent.sleep_event_id)
@@ -35,7 +35,7 @@ def get_sleep_event_data(start, end, db:Session, response_model: schemas.SleepEv
   else: # between 기간동안의 정보를 가져오기
     event_data = (db.query(model.SleepEvent, model.SleepInfo.date)
       .join(model.SleepInfo, model.SleepEvent.sleep_info_id == model.SleepInfo.sleep_info_id)
-      .filter(model.SleepInfo.nickname == 'test1')
+      .filter(model.SleepInfo.nickname == 'test')
       .filter(between(model.SleepInfo.date, start, end))
       .distinct()  # 모든 컬럼 조합의 중복 제거
       .order_by(model.SleepEvent.sleep_event_id)
