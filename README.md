@@ -28,7 +28,7 @@ http://127.0.0.1:8000/docs
 ```
 .
 ├── fastapi_app
-│   ├── routers # api routers
+│   ├── models # api routers
 │   |   ├── statistics_crud.py # 수면통계 crud 함수 모듈
 │   ├── routers # api routers
 │   |   ├── api_record.py # 수면측정 관련 api 구현 파일

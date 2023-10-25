@@ -14,13 +14,17 @@ let sleeptime;
 // 일일 수면결과는 가져오는 함수가 있겠지? 거기서 나오는거 넣어서 하면댐; 
 
 // period_button, pose_button 눌렀을 때 active 된 것 바꿔주기 
-$(document).on('click', '.period_button', function(){
+$(document).on('click', '.period_button', function () {
+  // event.stopPropagation();  // 이벤트 버블링 방지
   $('.period_button').parent('label').removeClass('active');
   $(this).parent('label').addClass('active');
+  $('.pose_buttons').children('label').removeClass('active');
+  $('input#front').parent('label').addClass('active');
 });
 
 $(document).on('click', '.pose_button', function(){
   $('.pose_button').parent('label').removeClass('active');
+  // $('.pose_seconds').parent('label').removeClass('active');
   $(this).parent('label').addClass('active');
 });
 
@@ -110,10 +114,11 @@ function get_period_data(endpoint){
           console.log('아무것도해당안댐ㅋ')
         }
         
-        // 기간을 새로 선택하면 선택한 기간의 새우잠 발생 횟수차트로 변경됨(default)
-        get_pose_chart(period, 'shrimp');
+        // 기간을 새로 선택하면 선택한 기간의 정면잠 발생 횟수차트로 변경됨(default)
+        // get_pose_chart(period, 'shrimp');
+        get_pose_chart(period, 'front');
         $('.pose_button').parent('label').removeClass('active');
-        $('.pose_buttons label:first-child').addClass('active');
+        $('input#front').parent('label').addClass('active');
       })
       .catch(error => {
           console.log('데이터 에러:', error);
@@ -302,7 +307,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // 디폴트 차트 출력: 기간별(week) + 포즈(shrimp) 
   get_default_chart("week");
   // get_period_data("week");
-  get_pose_chart("week", "shrimp");
+  get_pose_chart("week", "front");
 });
 
 let sleepDateChart;
@@ -386,6 +391,7 @@ function secondsToHMS_total(seconds) {
               backgroundColor: 'rgba(237, 254, 255, 1)'
           }]
       }, options: {
+        responsive: true,
         indexAxis: 'y',
         scales: {
           x: {

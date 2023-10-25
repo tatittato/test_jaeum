@@ -132,20 +132,20 @@
       <!-- 자세선택 버튼 시작 -->
       <!-- **몸방향: front, prone, left, right **자세: raise_arm, side, shrimp, knee_up, croos_legs, standard -->
       <div class="pose_buttons btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-light">
+        <label class="btn btn-light active">
           <input type="radio" class="pose_button" id="front" onClick="get_pose_chart(period, this.id)">정면
-          </label>
-          <label class="btn btn-light">
-            <input type="radio" class="pose_button" id="prone" onClick="get_pose_chart(period, this.id)">엎드려잠
-          </label>
-          <label class="btn btn-light">
-            <input type="radio" class="pose_button" id="side" onClick="get_pose_chart(period, this.id)">옆으로잠
-          </label>
-          <label class="btn btn-light active">
-            <input type="radio" class="pose_button" id="shrimp" onClick="get_pose_chart(period, this.id)">새우잠
-          </label>
+        </label>
+        <label class="btn btn-light">
+          <input type="radio" class="pose_button" id="prone" onClick="get_pose_chart(period, this.id)">엎드려잠
+        </label>
+        <label class="btn btn-light">
+          <input type="radio" class="pose_button" id="side" onClick="get_pose_chart(period, this.id)">옆으로잠
+        </label>
+        <label class="btn btn-light">
+          <input type="radio" class="pose_button" id="shrimp" onClick="get_pose_chart(period, this.id)">새우잠
+        </label>
       </div>
-      <div class="pose_buttons btn-group btn-group-toggle" data-toggle="buttons">
+      <div class="pose_buttons btn-group btn-group-toggle pose_seconds" data-toggle="buttons">
         <label class="btn btn-light">
           <input type="radio" class="pose_button" id="raise_arm" onClick="get_pose_chart(period, this.id)">만세잠
         </label>
