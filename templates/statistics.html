@@ -1,1 +1,146 @@
-test
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta charset="UTF-8">
+    <title>Chart.js Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 차트 위에 글씨써주는 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/statistics.css">
+  </head>
+  <script src="/static/js/statistics.js"></script>
+
+  <body style="padding:0px; margin:0px; width:100%; font-size: 0.85rem;">
+    
+    <div id="statistics_container" class="container" style="text-align:center;">
+      <!-- svg아이콘: https://www.svgrepo.com/svg/479183/diamond-mark-3 -->
+      <div class="icon-border">
+        <svg height="15px" width="15px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#6666ff;} </style> <g> <path class="st0" d="M431.684,252.936c-40.578-32.779-150.62-185.32-171.561-247.398C258.899,1.913,257.845,0,255.988,0 c-1.832,0-2.894,1.913-4.11,5.538C230.92,67.616,120.894,220.157,80.308,252.936c-1.053,0.843-1.946,2.44-1.946,3.064 c0,0.624,0.893,2.222,1.946,3.057c40.586,32.778,150.612,185.319,171.57,247.406c1.216,3.624,2.278,5.537,4.11,5.537 c1.857,0,2.911-1.913,4.135-5.537c20.941-62.087,130.983-214.628,171.561-247.406c1.046-0.835,1.954-2.432,1.954-3.057 C433.638,255.376,432.73,253.778,431.684,252.936z"></path> </g> </g></svg>
+        <svg height="15px" width="15px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#6666ff;} </style> <g> <path class="st0" d="M431.684,252.936c-40.578-32.779-150.62-185.32-171.561-247.398C258.899,1.913,257.845,0,255.988,0 c-1.832,0-2.894,1.913-4.11,5.538C230.92,67.616,120.894,220.157,80.308,252.936c-1.053,0.843-1.946,2.44-1.946,3.064 c0,0.624,0.893,2.222,1.946,3.057c40.586,32.778,150.612,185.319,171.57,247.406c1.216,3.624,2.278,5.537,4.11,5.537 c1.857,0,2.911-1.913,4.135-5.537c20.941-62.087,130.983-214.628,171.561-247.406c1.046-0.835,1.954-2.432,1.954-3.057 C433.638,255.376,432.73,253.778,431.684,252.936z"></path> </g> </g></svg>
+        <svg height="15px" width="15px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#6666ff;} </style> <g> <path class="st0" d="M431.684,252.936c-40.578-32.779-150.62-185.32-171.561-247.398C258.899,1.913,257.845,0,255.988,0 c-1.832,0-2.894,1.913-4.11,5.538C230.92,67.616,120.894,220.157,80.308,252.936c-1.053,0.843-1.946,2.44-1.946,3.064 c0,0.624,0.893,2.222,1.946,3.057c40.586,32.778,150.612,185.319,171.57,247.406c1.216,3.624,2.278,5.537,4.11,5.537 c1.857,0,2.911-1.913,4.135-5.537c20.941-62.087,130.983-214.628,171.561-247.406c1.046-0.835,1.954-2.432,1.954-3.057 C433.638,255.376,432.73,253.778,431.684,252.936z"></path> </g> </g></svg>
+      </div>
+    <!-- 7일간 수면 현황 시작 -->
+    <h6>7일간 수면 현황</h6>
+    <div id="statistics_table_div">
+      <table border="1" style="border-collapse: collapse; margin:0 auto;">
+        <tr>
+          <th>총 수면시간</th> <!-- 전체 수면시간은 시간데이터를 초로 환산한 다음 합산 후 다시 시간으로 환산하면 될 듯 -->
+          <td><span id="sevendays_total_sleep_time"></span></td>
+        </tr>
+        <tr>
+          <th>평균 수면시간</th>
+          <td><span id="sevendays_average_sleep_time"></span></td>
+        </tr>
+        <tr>
+          <th>평균 수면 점수</th>
+          <td><span id="sevendays_sleep_score_average"></span>점</td>
+        </tr>
+      </table>
+    </div>
+    <div class="chart_div"">
+      <canvas id="seven_days_chart" height="160px"></canvas>
+    </div>
+    <!-- 주간 수면 현황 끝 -->
+    <div class="icon-border">
+      <svg height="15px" width="15px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#FF9999" stroke="#FF9999"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#FF9999;} </style> <g> <path class="st0" d="M431.684,252.936c-40.578-32.779-150.62-185.32-171.561-247.398C258.899,1.913,257.845,0,255.988,0 c-1.832,0-2.894,1.913-4.11,5.538C230.92,67.616,120.894,220.157,80.308,252.936c-1.053,0.843-1.946,2.44-1.946,3.064 c0,0.624,0.893,2.222,1.946,3.057c40.586,32.778,150.612,185.319,171.57,247.406c1.216,3.624,2.278,5.537,4.11,5.537 c1.857,0,2.911-1.913,4.135-5.537c20.941-62.087,130.983-214.628,171.561-247.406c1.046-0.835,1.954-2.432,1.954-3.057 C433.638,255.376,432.73,253.778,431.684,252.936z"></path> </g> </g></svg>
+      <svg height="15px" width="15px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#FF9999" stroke="#FF9999"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#FF9999;} </style> <g> <path class="st0" d="M431.684,252.936c-40.578-32.779-150.62-185.32-171.561-247.398C258.899,1.913,257.845,0,255.988,0 c-1.832,0-2.894,1.913-4.11,5.538C230.92,67.616,120.894,220.157,80.308,252.936c-1.053,0.843-1.946,2.44-1.946,3.064 c0,0.624,0.893,2.222,1.946,3.057c40.586,32.778,150.612,185.319,171.57,247.406c1.216,3.624,2.278,5.537,4.11,5.537 c1.857,0,2.911-1.913,4.135-5.537c20.941-62.087,130.983-214.628,171.561-247.406c1.046-0.835,1.954-2.432,1.954-3.057 C433.638,255.376,432.73,253.778,431.684,252.936z"></path> </g> </g></svg>
+      <svg height="15px" width="15px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#FF9999" stroke="#FF9999"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#FF9999;} </style> <g> <path class="st0" d="M431.684,252.936c-40.578-32.779-150.62-185.32-171.561-247.398C258.899,1.913,257.845,0,255.988,0 c-1.832,0-2.894,1.913-4.11,5.538C230.92,67.616,120.894,220.157,80.308,252.936c-1.053,0.843-1.946,2.44-1.946,3.064 c0,0.624,0.893,2.222,1.946,3.057c40.586,32.778,150.612,185.319,171.57,247.406c1.216,3.624,2.278,5.537,4.11,5.537 c1.857,0,2.911-1.913,4.135-5.537c20.941-62.087,130.983-214.628,171.561-247.406c1.046-0.835,1.954-2.432,1.954-3.057 C433.638,255.376,432.73,253.778,431.684,252.936z"></path> </g> </g></svg>
+    </div>
+      <h6>기간별 수면 현황</h6>
+
+    <!-- 기간별 날짜 출력 시작 (★default 일주일★) -->
+      <h6> [ <span id="first_date"></span> ~ <span id="last_date"></span> ] </h6>
+
+    <!-- 기간별 날짜 출력 끝 -->
+
+    <!-- 기간별 수면정보 테이블 시작 -->
+    <div id="statistics_table_div">
+      <table border="1" style="border-collapse: collapse; margin:0 auto;">
+        <tr>
+          <th>총 수면시간</th> <!-- 전체 수면시간은 시간데이터를 초로 환산한 다음 합산 후 다시 시간으로 환산하면 될 듯 -->
+          <td><span id="period_total_sleep_time"></span></td>
+        </tr>
+        <tr>
+          <th>평균 수면시간</th>
+          <td><span id="period_average_sleep_time"></span></td>
+        </tr>
+        <tr>
+          <th>평균 수면 점수</th>
+          <td><span id="period_average_sleep_score"></span>점</td>
+        </tr>
+      </table>
+    </div>
+    <!-- 기간별 수면정보 테이블 끝 -->
+    <div class="period_buttons btn-group btn-group-toggle" data-toggle="buttons">
+      <label class="btn btn-light active">
+        <input type="radio" class="period_button" id="week" onClick="get_period_data(this.id)">1주
+      </label>
+      <label class="btn btn-light">
+        <input type="radio" class="period_button" id="month" onClick="get_period_data(this.id)">1개월
+      </label>
+      <label class="btn btn-light">
+        <input type="radio" class="period_button" id="sixmonths" onClick="get_period_data(this.id)">6개월
+      </label>
+      <label class="btn btn-light">
+        <input type="radio" class="period_button" id="year" onClick="get_period_data(this.id)">1년
+      </label>
+      <label class="btn btn-light">
+        <input type="radio" class="period_button" id="entire" onClick="get_period_data(this.id)">전체
+      </label>
+    </div>
+
+    <div class="icon-border">
+      <svg height="15px" width="15px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#ffffff" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#f2f2f2;} </style> <g> <path class="st0" d="M431.684,252.936c-40.578-32.779-150.62-185.32-171.561-247.398C258.899,1.913,257.845,0,255.988,0 c-1.832,0-2.894,1.913-4.11,5.538C230.92,67.616,120.894,220.157,80.308,252.936c-1.053,0.843-1.946,2.44-1.946,3.064 c0,0.624,0.893,2.222,1.946,3.057c40.586,32.778,150.612,185.319,171.57,247.406c1.216,3.624,2.278,5.537,4.11,5.537 c1.857,0,2.911-1.913,4.135-5.537c20.941-62.087,130.983-214.628,171.561-247.406c1.046-0.835,1.954-2.432,1.954-3.057 C433.638,255.376,432.73,253.778,431.684,252.936z"></path> </g> </g></svg>
+      <svg height="15px" width="15px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#ffffff" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#f2f2f2;} </style> <g> <path class="st0" d="M431.684,252.936c-40.578-32.779-150.62-185.32-171.561-247.398C258.899,1.913,257.845,0,255.988,0 c-1.832,0-2.894,1.913-4.11,5.538C230.92,67.616,120.894,220.157,80.308,252.936c-1.053,0.843-1.946,2.44-1.946,3.064 c0,0.624,0.893,2.222,1.946,3.057c40.586,32.778,150.612,185.319,171.57,247.406c1.216,3.624,2.278,5.537,4.11,5.537 c1.857,0,2.911-1.913,4.135-5.537c20.941-62.087,130.983-214.628,171.561-247.406c1.046-0.835,1.954-2.432,1.954-3.057 C433.638,255.376,432.73,253.778,431.684,252.936z"></path> </g> </g></svg>
+      <svg height="15px" width="15px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#f2f2f2" stroke="#f2f2f2"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#f2f2f2;} </style> <g> <path class="st0" d="M431.684,252.936c-40.578-32.779-150.62-185.32-171.561-247.398C258.899,1.913,257.845,0,255.988,0 c-1.832,0-2.894,1.913-4.11,5.538C230.92,67.616,120.894,220.157,80.308,252.936c-1.053,0.843-1.946,2.44-1.946,3.064 c0,0.624,0.893,2.222,1.946,3.057c40.586,32.778,150.612,185.319,171.57,247.406c1.216,3.624,2.278,5.537,4.11,5.537 c1.857,0,2.911-1.913,4.135-5.537c20.941-62.087,130.983-214.628,171.561-247.406c1.046-0.835,1.954-2.432,1.954-3.057 C433.638,255.376,432.73,253.778,431.684,252.936z"></path> </g> </g></svg>
+    </div>
+
+    <!-- 기간별 평균 수면시간 시작 -->
+      <h6>기간별 평균 수면시간</h6>
+      
+      <div class="chart_div">
+        <canvas id="period_chart" height="300px"></canvas>
+      </div>
+    <!-- 기간별 평균 수면시간 끝 -->
+
+
+    
+    <div class="icon-border">
+      <svg height="15px" width="15px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#ffffff" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#f2f2f2;} </style> <g> <path class="st0" d="M431.684,252.936c-40.578-32.779-150.62-185.32-171.561-247.398C258.899,1.913,257.845,0,255.988,0 c-1.832,0-2.894,1.913-4.11,5.538C230.92,67.616,120.894,220.157,80.308,252.936c-1.053,0.843-1.946,2.44-1.946,3.064 c0,0.624,0.893,2.222,1.946,3.057c40.586,32.778,150.612,185.319,171.57,247.406c1.216,3.624,2.278,5.537,4.11,5.537 c1.857,0,2.911-1.913,4.135-5.537c20.941-62.087,130.983-214.628,171.561-247.406c1.046-0.835,1.954-2.432,1.954-3.057 C433.638,255.376,432.73,253.778,431.684,252.936z"></path> </g> </g></svg>
+      <svg height="15px" width="15px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#ffffff" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#f2f2f2;} </style> <g> <path class="st0" d="M431.684,252.936c-40.578-32.779-150.62-185.32-171.561-247.398C258.899,1.913,257.845,0,255.988,0 c-1.832,0-2.894,1.913-4.11,5.538C230.92,67.616,120.894,220.157,80.308,252.936c-1.053,0.843-1.946,2.44-1.946,3.064 c0,0.624,0.893,2.222,1.946,3.057c40.586,32.778,150.612,185.319,171.57,247.406c1.216,3.624,2.278,5.537,4.11,5.537 c1.857,0,2.911-1.913,4.135-5.537c20.941-62.087,130.983-214.628,171.561-247.406c1.046-0.835,1.954-2.432,1.954-3.057 C433.638,255.376,432.73,253.778,431.684,252.936z"></path> </g> </g></svg>
+      <svg height="15px" width="15px" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve" fill="#f2f2f2" stroke="#f2f2f2"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .st0{fill:#f2f2f2;} </style> <g> <path class="st0" d="M431.684,252.936c-40.578-32.779-150.62-185.32-171.561-247.398C258.899,1.913,257.845,0,255.988,0 c-1.832,0-2.894,1.913-4.11,5.538C230.92,67.616,120.894,220.157,80.308,252.936c-1.053,0.843-1.946,2.44-1.946,3.064 c0,0.624,0.893,2.222,1.946,3.057c40.586,32.778,150.612,185.319,171.57,247.406c1.216,3.624,2.278,5.537,4.11,5.537 c1.857,0,2.911-1.913,4.135-5.537c20.941-62.087,130.983-214.628,171.561-247.406c1.046-0.835,1.954-2.432,1.954-3.057 C433.638,255.376,432.73,253.778,431.684,252.936z"></path> </g> </g></svg>
+    </div>
+
+    <!-- 자세별 발생 횟수 시작 -->
+      <h6>기간내 자세별 발생 횟수</h6>
+
+      <div class="pose_buttons btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-light active">
+          <input type="radio" class="pose_button" id="shrimp" onClick="get_pose_chart(period, this.id)">새우잠
+        </label>
+        <label class="btn btn-light">
+          <input type="radio" class="pose_button" id="manse" onClick="get_pose_chart(period, this.id)">만세잠
+        </label>
+        <label class="btn btn-light">
+          <input type="radio" class="pose_button" id="cross" onClick="get_pose_chart(period, this.id)">백숙잠
+        </label>
+        <label class="btn btn-light">
+          <input type="radio" class="pose_button" id="standard" onClick="get_pose_chart(period, this.id)">정자세
+        </label>
+        <label class="btn btn-light">
+          <input type="radio" class="pose_button" id="front" onClick="get_pose_chart(period, this.id)">정면
+        </label>
+      </div>
+      
+      <div class="chart_div">
+        <canvas id="sleep_pose_chart"></canvas>
+      </div>
+    <!-- 자세별 발생 횟수 끝 -->
+    </div>
+  </body>
+</html>
