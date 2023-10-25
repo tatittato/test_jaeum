@@ -1,52 +1,83 @@
 /* statistics css */
-
-/* buttons div */
-/* div.period_buttons input #text, div.pose_buttons input #text {
-  color: navy;
-  font-size: 0.85rem;
-} */
 body {
   background-image: url(../background/night.jpg);
-  /* background-repeat: repeat-y; */
   background-size: cover;
   background-color: black;
   height: 100%;
   padding: 0;
   margin: 0;
   font-size: 0.85rem;
-  color:white;
-}
-/* button.selected {
-  font-weight: bold;
-} */
-
-div.btn-group {
-  margin: 15px 0;
-}
-div.period_buttons label.btn.btn-light,
-div.pose_buttons label.btn.btn-light{
-  font-size: 0.85rem;
+  color:rgb(221, 221, 221);
 }
 
-/* div#statistics_container h5 {
-  margin: 15px 0;
-} */
+/* wrap div */
+div#statistics_container {
+  text-align: center;
+}
+
+/* h6 */
+div#statistics_container h6 {
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+/* 현황 테이블 */
 div#statistics_table_div {
   padding:15px 0;
 }
 
+table.statistics_tables {
+  border-collapse: collapse; 
+  margin:0 auto;
+}
+
+/* chart div 관련 */
 div.chart_div {
   width: 370px;
   margin:0 auto;
   padding: 15px 0;
 }
 
-/* svg 아이콘 div */
-div.icon-border {
-  margin: 20px 0;
+/* 버튼 관련 */
+div.period_buttons label.btn.btn-light,
+div.pose_buttons label.btn.btn-light {
+  font-size: 0.85rem;
 }
-/* svg 아이콘 컬러 */
-.st0 {
-  fill: #66B2ff !important;
-  /* fill: #6666ff !important; */
+
+div.pose_buttons {
+  width:375px;
+  margin: 0.5px 0 ;
+}
+
+div.button-group {
+  padding: 25px 0;
+}
+
+button#toPageTop {
+  font-size: 0.8rem;
+  width: 50px;
+  height: 50px;
+  border-radius:50%;
+  background-color: #6666ff;
+  border: #2c2c5b;
+  color: rgb(221, 221, 221);
+  /* font-weight: bold; */
+  outline: none;
+}
+button#toPageTop:active, button#toPageTop:focus, button#toPageTop:hover {
+  background-color: #aaa;
+  border: none;
+  /* font-weight: bold; */
+  color:#2c2c5b;
+  outline: none;
+  box-shadow: none;
+}
+
+/* svg 아이콘 관련 */
+div.icon-border {
+  margin: 20px 0 0 10px;
+}
+.puchipuchi_een {
+  fill: #6666ff !important;
+  stroke: #2c2c5b !important;
 }

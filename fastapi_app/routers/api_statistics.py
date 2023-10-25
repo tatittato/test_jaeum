@@ -109,7 +109,6 @@ async def get_chart_pose(period:str, pose: str, db: Session = Depends(get_db)) -
             dataframe_datas = statistics_functions.get_data_period(dataframe_datas, period)
             dict_datas = statistics_functions.trans_date_dataframte_pose(dataframe_datas)
 
-
         except Exception as e:
             print("Exception")
             print(e)

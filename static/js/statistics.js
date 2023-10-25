@@ -549,4 +549,14 @@ function get_pose_chart(period, endpoint){
       });
 };
 
-
+// 페이지 상단으로 가는 버튼
+function scrollToTop() {
+  const scrollDuration = 250; 
+  const scrollStep = -window.scrollY / (scrollDuration / 15),
+        scrollInterval = setInterval(function(){
+          if (window.scrollY != 0) {
+              window.scrollBy(0, scrollStep);
+          }
+          else clearInterval(scrollInterval); 
+        },15);
+}
