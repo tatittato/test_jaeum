@@ -12,6 +12,7 @@ body {
 
 /* wrap div */
 div#statistics_container {
+  background-color: rgba(14, 8, 65, 0.4);
   text-align: center;
 }
 

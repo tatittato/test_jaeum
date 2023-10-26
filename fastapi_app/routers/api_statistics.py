@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Depends
-from fastapi.templating import Jinja2Templates
+from fastapi import APIRouter, Depends, Query
 from typing import List, Dict, Union, Tuple
 from ..models import statistics_crud
 from ..database import get_db
@@ -9,8 +8,6 @@ from datetime import timedelta, date, datetime
 from dateutil.relativedelta import relativedelta
 import numpy as np
 from ..utils import statistics_functions
-
-templates = Jinja2Templates(directory="templates")
 
 router = APIRouter(
     tags=["Statistics"],
@@ -32,13 +29,15 @@ end_day = today
 period_return_hint = Dict[str, Union[Dict[str, int], Tuple[int, int, int]]]
 
 # ▼▼▼▼▼▼ 기간별 평균 수면시간 ▼▼▼▼▼▼
-@router.get("/statistics/{period}/") #경로 매개변수 사용
-async def get_period_data(period: str, db: Session = Depends(get_db)) -> Dict[str, Union[int, float, Tuple[int, int, int], List[str], List[int], period_return_hint]]:
-    # today = date.today()
-    # end_day = today
+@router.get("/statistics/{nickname}/{period}") #경로 매개변수 사용
+async def get_period_data(period: str, nickname: str, db: Session = Depends(get_db)) -> Dict[str, Union[int, float, str, Tuple[int, int, int], List[str], List[int], period_return_hint]]:
     period_average =[]
     global chart_label
     global start_day
+    
+    print("+" * 50)
+    print('기간별 함수의 닉네임' , nickname, '기간별 함수의 기간', period)
+    print("+" * 50)
 
     # 7일간 수면현황 + 기간별 수면현황(1주) 에서 사용할 start_day 변수 설정.
     if period == "week":
@@ -61,7 +60,7 @@ async def get_period_data(period: str, db: Session = Depends(get_db)) -> Dict[st
     else:
         return {"error": "Invalid period specified"}
     
-    period_data = statistics_crud.get_sleep_data(db=db, start=start_day, end=end_day, response_model=SleepInfoBase)
+    period_data = statistics_crud.get_sleep_data(db=db, start=start_day, end=end_day, nickname=nickname, response_model=SleepInfoBase)
 
     if period_data:
         period_first_last = statistics_functions.get_first_last_day(period_data)
@@ -83,7 +82,10 @@ async def get_period_data(period: str, db: Session = Depends(get_db)) -> Dict[st
         print(type(dict_datas))
         print(dict_datas)
     else:
-        dict_datas = np.zeros(5).tolist()
+        print("데이터가 없는 경우 period Exception")
+        period_first_last = ["-", "-"]
+        dict_datas = "-"
+        score_average = 0
         period_total = 0
         period_average = 0
         
@@ -91,15 +93,23 @@ async def get_period_data(period: str, db: Session = Depends(get_db)) -> Dict[st
 
 
 # ▼▼▼▼▼▼ 자세별 발생 횟수 ▼▼▼▼▼▼
-@router.get("/statistics/{period}/{pose}")
-async def get_chart_pose(period:str, pose: str, db: Session = Depends(get_db)) -> Dict[str, Dict[str, Dict[str, int]]]:
+@router.get("/statistics/{nickname}/{period}/{pose}")
+# async def get_chart_pose(period:str, pose: str, nickname:str, db: Session = Depends(get_db)) -> Dict[str, Union[int, str, Dict[str, Dict[str, int]]]]:
+async def get_chart_pose(period: str, pose: str, nickname: str, db: Session = Depends(get_db)) -> Dict[str, Union[int, str, Dict[str, Dict[str, int]]]]:
+    print('nickname있음?')
+    print(nickname)
+
+
     if period == "entire":
-        event_data = statistics_crud.get_sleep_event_data(start=None, end=end_day, db=db, response_model=SleepInfoBase)
+        event_data = statistics_crud.get_sleep_event_data(start=None, end=end_day, nickname = nickname, db=db, response_model=SleepInfoBase)
     else:
-        event_data = statistics_crud.get_sleep_event_data(start=start_day, end=end_day, db=db, response_model=SleepEventBase)
+        event_data = statistics_crud.get_sleep_event_data(start=start_day, end=end_day, nickname = nickname, db=db, response_model=SleepEventBase)
 
     if event_data is None or len(event_data) == 0:
-        dict_datas = np.zeros(5).tolist()
+        # dict_datas = np.zeros(5).tolist()
+        # dict_datas = {"_": 0}
+        print('event_data가 None이거나 len이 0과 같다')
+        dict_datas = "-"
         return {"chart_data": dict_datas}
     else: 
         # 여기서 자세별로 구현해야된다
@@ -110,10 +120,10 @@ async def get_chart_pose(period:str, pose: str, db: Session = Depends(get_db)) -
             dict_datas = statistics_functions.trans_date_dataframte_pose(dataframe_datas)
 
         except Exception as e:
-            print("Exception")
+            print("데이터가 없는 경우 pose Exception")
             print(e)
-            dict_datas = np.zeros(5).tolist()
-            return {"chart_data": dict_datas}
+            dict_datas = "-"
+            return {"chart_data": dict_datas}       
         
         return {"chart_data": dict_datas }
 

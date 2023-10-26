@@ -1,6 +1,4 @@
-from fastapi import APIRouter
-from fastapi import Request
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
 
 router = APIRouter(
@@ -10,7 +8,7 @@ router = APIRouter(
 
 templates = Jinja2Templates(directory="templates")
 
-@router.get("/statistics/")
+@router.get("/statistics")
 def chart(request: Request):
 
     return templates.TemplateResponse("statistics.html", {"request": request})

@@ -1,0 +1,73 @@
+.container {
+  position: relative; /* 부모 요소를 상대 위치로 설정 */
+  background-image: url("/static/images/night.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  text-align: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  color: #333;
+}
+
+p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.button-container {
+  text-align: center;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.input-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+input[name="nickname"] {
+  margin: 0 auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  text-align: center;
+}
+
+input[name="nickname"]::placeholder {
+  color: #999;
+}
+
+#menu button {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 150px;
+  left: 150px;
+  transform: translate(-50%, 0);
+}
