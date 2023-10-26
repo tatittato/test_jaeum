@@ -12,6 +12,10 @@ body {
   /* 여기에서 원하는 폰트 패밀리를 지정합니다. */
 }
 
+img {
+  width: 200px;
+}
+
 .container {
   position: relative; /* 부모 요소를 상대 위치로 설정 */
   background-image: url("/static/images/img/night.jpg");
@@ -75,7 +79,7 @@ input[name="nickname"] {
   background-color: rgba(0, 123, 255, 0); /* 투명한 배경 설정 */
   border-radius: 5px;
   color: #fff;
-  font-family: "CustomFont", sans-serif;
+  font-family: "Cafe24Oneprettynight";
   font-size: 20px;
   text-align: center;
   width: 200px;
@@ -83,6 +87,6 @@ input[name="nickname"] {
 
 input[name="nickname"]::placeholder {
   color: #999;
-  font-family: "CustomFont", sans-serif;
+  font-family: "Cafe24Oneprettynight";
   font-size: 20px;
 }

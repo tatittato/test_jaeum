@@ -17,6 +17,7 @@
 
     <div class="container">
       <h1>수면 측정</h1>
+
       <!-- 닉네임 입력칸 -->
       <input
         type="hidden"
@@ -26,9 +27,13 @@
       />
       <input type="hidden" id="sleep_info_id" value="{{ sleep_info_id }}" />
       <!-- 웹캠 -->
-      <video id="camera" autoplay></video>
+      <br />
+      <div>
+        <video id="camera" autoplay></video>
+      </div>
+      <br />
       <div class="button-container">
-        <button id="captureButton">촬영</button>
+        <button id="captureButton">측정</button>
         <button id="endButton">종료</button>
       </div>
     </div>

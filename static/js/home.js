@@ -1,32 +1,37 @@
 document.getElementById("saveButton").addEventListener("click", function () {
   const nickname = document.getElementById("nickname").value;
 
-  // 데이터를 JSON 형식으로 준비
-  const userData = {
-    nickname: nickname,
-  };
+  // 닉네임의 길이를 확인하고 두 글자 이상일 때만 요청을 보냅니다.
+  if (nickname.length >= 2) {
+    // 데이터를 JSON 형식으로 준비
+    const userData = {
+      nickname: nickname,
+    };
 
-  // 서버로 데이터를 POST 요청으로 전송
-  fetch("/record/create_user", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // 서버에서 받은 응답을 처리할 수 있습니다.
-      console.log("서버에서 받은 데이터:", data);
-      alert("사용자가 생성되었습니다.");
-
-      // 페이지 reload
-      location.reload();
+    // 서버로 데이터를 POST 요청으로 전송
+    fetch("/record/create_user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
     })
-    .catch((error) => {
-      console.error("서버 요청 오류:", error);
-      alert("사용자 생성에 실패했습니다.");
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        // 서버에서 받은 응답을 처리할 수 있습니다.
+        console.log("서버에서 받은 데이터:", data);
+        alert("사용자가 생성되었습니다.");
+
+        // 페이지 reload
+        location.reload();
+      })
+      .catch((error) => {
+        console.error("서버 요청 오류:", error);
+        alert("사용자 생성에 실패했습니다.");
+      });
+  } else {
+    alert("닉네임은 두 글자 이상이어야 합니다.");
+  }
 });
 
 document.getElementById("capButton").addEventListener("click", function () {
