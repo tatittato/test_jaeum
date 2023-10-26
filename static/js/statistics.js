@@ -2,8 +2,8 @@
 // 그래프 위에 label 출력용 코드
 Chart.register(ChartDataLabels);
 
-const urlParams = new URLSearchParams(window.location.search);
-const nickname = urlParams.get("nickname"); // URL에서 닉네임 가져오기
+// const urlParams = new URLSearchParams(window.location.search);
+// const nickname = urlParams.get("nickname"); // URL에서 닉네임 가져오기
 
 // 각종 변수들 전역선언
 let period;
@@ -14,7 +14,11 @@ let rawData;
 let chart_label;
 let sleeptime;
 
-// 일일 수면결과는 가져오는 함수가 있겠지? 거기서 나오는거 넣어서 하면댐; 
+
+function getQueryParameter(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
 
 // period_button, pose_button 눌렀을 때 active 된 것 바꿔주기 
 $(document).on('click', '.period_button', function () {
@@ -273,6 +277,9 @@ const data = {
 
 const seven_days_chart = new Chart(sevendays_canvas, config);
 }
+
+const nickname = localStorage.getItem('nickname');
+console.log("home에서 로컬에 저장한 닉넴", nickname);
 
 // ★ 이벤트 리스너 (즉시실행) page 로드되면 실행할 것 ★
 document.addEventListener("DOMContentLoaded", function () {

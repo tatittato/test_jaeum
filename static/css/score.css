@@ -1,4 +1,4 @@
-body {
+div.container-fluid {
   font-family: Arial, sans-serif;
   height: 100vh;
   background: url(/static/images/img/night.jpg) center;

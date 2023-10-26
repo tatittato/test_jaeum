@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>웹 카메라 촬영</title>
+{% extends "header.html" %}
+{% block content %}
     <link rel="stylesheet" type="text/css" href="/static/css/record.css" />
-  </head>
-  <body>
-    <audio id="backgroundMusic" controls autoplay>
-      <source src="static/music/{{randomMusic}}" type="audio/mpeg" />
-    </audio>
+
+    <div class="container-fluid">
+      <audio id="backgroundMusic" controls autoplay>
+        <source src="static/music/{{randomMusic}}" type="audio/mpeg" />
+      </audio>
 
     <div class="container">
       <h1>수면 측정</h1>
@@ -26,8 +25,19 @@
         <button id="endButton">종료</button>
       </div>
     </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <!-- <p id="sleep_info_id">{{sleep_info_id}}</p> -->
-
+  </div>
     <script src="static/js/record.js"></script>
-  </body>
-</html>
+    <script src="static/js/common.js"></script>
+    {% endblock %}

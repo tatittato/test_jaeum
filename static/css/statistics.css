@@ -1,5 +1,5 @@
 /* statistics css */
-body {
+div.container-fluid {
   background-image: url(../background/night.jpg);
   background-size: cover;
   background-color: black;

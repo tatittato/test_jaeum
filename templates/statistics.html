@@ -1,24 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <meta charset="UTF-8">
-    <title>재움 수면통계</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- 차트 위에 글씨써주는 라이브러리 -->
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-    <!-- bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/css/statistics.css">
-  </head>
-  <script src="/static/js/statistics.js"></script>
-
-  <body">
-    
+{% extends "header.html" %}
+{% block content %}
+<link rel="stylesheet" href="../static/css/statistics.css">
+  <!-- <body> -->
     <div id="statistics_container" class="container-fluid">
-
       <!-- svg아이콘: https://www.svgrepo.com/svg/412281/sleep -->
       <div class="icon-border">
         <svg height="15px" width="15px" version="1.1" id="Uploaded to svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" fill="#6666ff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <style type="text/css"> .puchipuchi_een{fill:#66B2ff;} </style> <path class="puchipuchi_een" d="M28.62,17.482c0.508-0.452,1.324-0.028,1.215,0.675C28.797,24.865,22.998,30,16,30 C8.268,30,2,23.732,2,16C2,8.985,7.16,3.175,13.891,2.158c0.688-0.104,1.096,0.698,0.651,1.195C12.963,5.119,12,7.445,12,10 c0,5.523,4.477,10,10,10C24.542,20,26.858,19.047,28.62,17.482z"></path> </g></svg>
@@ -175,5 +160,12 @@
         <button type="button" class="btn btn-light" id="toPageTop" onclick="scrollToTop()">TOP</button>
       </div>
     </div>
-  </body>
-</html>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 차트 위에 글씨써주는 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <!-- bootstrap -->
+    <script src="/static/js/statistics.js"></script>
+    <script src="static/js/common.js"></script>
+    {% endblock %}

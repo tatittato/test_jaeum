@@ -8,15 +8,15 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <title>재움</title>
-    <link rel="stylesheet" type="text/css" href="static/css/home.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/home.css" />
   </head>
   <body>
     <div class="container">
-      <div>
+      <!-- <div>
         <button id="menu">
           <img src="/static/images/img/menu.png" alt="메뉴" />
         </button>
-      </div>
+      </div> -->
       <img src="/static/images/img/logo.png" alt="재움" />
       <p>사용자를 생성하거나 기존 사용자로 로그인하세요.</p>
       <div class="input-container">
@@ -27,12 +27,21 @@
         />
       </div>
       <div class="button-container">
-        <button id="saveButton">새로운 사용자 생성</button>
-        <button id="capButton">촬영페이지로</button>
-        <button id="scoreButton">수면점수</button>
-        <button id="statisticsButton">수면통계</button>
+        <button id="saveButton" class="saveButton">새로운 사용자 생성</button>
+        <button id="capButton" class="capButton">촬영페이지로</button>
+        <button id="scoreButton" class="scoreButton">수면점수</button>
+        <button id="statisticsButton" class="statisticsButton">수면통계</button>
       </div>
     </div>
+    <script>
+      document.getElementById('saveButton').addEventListener("click", function(){
+        const nickname = document.getElementById("nickname").value;
+        savedNickname = nickname;
+        console.log(savedNickname);
+        console.log('1');
+      });
+    </script>
     <script src="static/js/home.js"></script>
+    <script src="/static/js/common.js"></script>
   </body>
 </html>

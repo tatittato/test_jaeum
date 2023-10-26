@@ -1,18 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <title>Document</title>
+{% extends "header.html" %}
+{% block content %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <link rel="stylesheet" type="text/css" href="static/css/score.css" />
-  </head>
-  <body>
+    <link rel="stylesheet" type="text/css" href="/static/css/score.css" />
+
+<div class="contain container-fluid">
     <label for="date"
       >날짜를 선택하세요:
       <input type="date" id="selectedDate" value="date" />
@@ -59,7 +52,9 @@
       밤 2시 ~5시 사이에 잠들었다면 5점<br />
       이외의 시간에 잠들었다면 0점
     </div>
+</div>
 
-    <script src="static/js/score.js"></script>
-  </body>
-</html>
+<script src="/static/js/score.js"></script>
+<script src="static/js/common.js"></script>
+    {% endblock %}
+

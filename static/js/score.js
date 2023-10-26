@@ -1,5 +1,8 @@
 //첫화면은 오늘 날짜의 수면점수를 보여줌
 
+const nickname = localStorage.getItem('nickname');
+console.log("home에서 로컬에 저장한 닉넴", nickname);
+
 document.addEventListener("DOMContentLoaded", function () {
   //한국시간에 맞추기 위해서 realdate 변수에 9시간 빼서 넣음
   const offset = new Date().getTimezoneOffset() * 60000;
