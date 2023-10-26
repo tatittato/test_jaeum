@@ -29,14 +29,11 @@ class SleepInfo(Base):
 # 수면 이벤트 테이블
 class SleepEvent(Base):
     __tablename__ = "sleep_event"
-
     sleep_event_id = Column(Integer, autoincrement=True, primary_key=True)
     sleep_info_id = Column(Integer, ForeignKey("sleep_info.sleep_info_id"), nullable=False)
     sleep_event = Column(String(255), nullable=True)
     event_time = Column(String(255)) 
     event_data_path = Column(String(255))
-
-
 
 # 처음 한번만 생성
 Base.metadata.create_all(engine)

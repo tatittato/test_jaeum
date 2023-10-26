@@ -94,11 +94,9 @@ async def get_period_data(period: str, nickname: str, db: Session = Depends(get_
 
 # ▼▼▼▼▼▼ 자세별 발생 횟수 ▼▼▼▼▼▼
 @router.get("/statistics/{nickname}/{period}/{pose}")
-# async def get_chart_pose(period:str, pose: str, nickname:str, db: Session = Depends(get_db)) -> Dict[str, Union[int, str, Dict[str, Dict[str, int]]]]:
 async def get_chart_pose(period: str, pose: str, nickname: str, db: Session = Depends(get_db)) -> Dict[str, Union[int, str, Dict[str, Dict[str, int]]]]:
     print('nickname있음?')
     print(nickname)
-
 
     if period == "entire":
         event_data = statistics_crud.get_sleep_event_data(start=None, end=end_day, nickname = nickname, db=db, response_model=SleepInfoBase)
@@ -106,8 +104,6 @@ async def get_chart_pose(period: str, pose: str, nickname: str, db: Session = De
         event_data = statistics_crud.get_sleep_event_data(start=start_day, end=end_day, nickname = nickname, db=db, response_model=SleepEventBase)
 
     if event_data is None or len(event_data) == 0:
-        # dict_datas = np.zeros(5).tolist()
-        # dict_datas = {"_": 0}
         print('event_data가 None이거나 len이 0과 같다')
         dict_datas = "-"
         return {"chart_data": dict_datas}
@@ -115,10 +111,11 @@ async def get_chart_pose(period: str, pose: str, nickname: str, db: Session = De
         # 여기서 자세별로 구현해야된다
         try:
             dataframe_datas = statistics_functions.to_dataframe_pose(event_data)
-            # data를 나눌 범위설정
             dataframe_datas = statistics_functions.get_data_period(dataframe_datas, period)
             dict_datas = statistics_functions.trans_date_dataframte_pose(dataframe_datas)
-
+            print("dicdatas > 자세별 함수")
+            print(dict_datas)
+            print("==" * 20)
         except Exception as e:
             print("데이터가 없는 경우 pose Exception")
             print(e)
