@@ -14,7 +14,7 @@ templates = Jinja2Templates(directory="templates")
 @router.get("/score", response_class=HTMLResponse)
 async def home_page(request: Request):
     return templates.TemplateResponse(
-        "home.html",
+        "score.html",
         {
             "request": request,
             "test_text": "hello score page"

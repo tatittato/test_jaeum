@@ -114,8 +114,11 @@ captureButton.addEventListener("click", function () {
 
           const sleepInfoIdInput = document.getElementById("sleep_info_id");
           sleepInfoIdInput.value = sleep_info_id;
+
+          // console.log("왜?", (sleepInfoId.value = sleep_info_id));
+
+          // 이제 create_sleep_info와 get_info_id가 모두 완료되었음
         })
-        // 이제 create_sleep_info와 get_info_id가 모두 완료되었음
         .catch(function (error) {
           console.error("에러:", error);
         });
@@ -123,24 +126,24 @@ captureButton.addEventListener("click", function () {
       // 10분 후부터 프레임 전송 시작
       // timeoutHandlerId = setTimeout(captureAndUploadFrame, 600000);
 
-      // 랜덤 음악 파일 경로 목록
-      const musicFiles = [
-        "Astor Piazzolla - The Four Seasons of Buenos Aires.mp3",
-        "ES_A Travelers' Gloom - Dew Of Light.mp3",
-      ];
+      // // 랜덤 음악 파일 경로 목록
+      // const musicFiles = [
+      //   "Astor Piazzolla - The Four Seasons of Buenos Aires.mp3",
+      //   "ES_A Travelers' Gloom - Dew Of Light.mp3",
+      // ];
 
-      // 랜덤 음악 파일 선택
-      const randomIndex = Math.floor(Math.random() * musicFiles.length);
-      const randomMusic = musicFiles[randomIndex];
+      // // 랜덤 음악 파일 선택
+      // const randomIndex = Math.floor(Math.random() * musicFiles.length);
+      // const randomMusic = musicFiles[randomIndex];
 
-      // 10초 후에 음악을 재생
-      setTimeout(function () {
-        document.getElementById(
-          "backgroundMusic"
-        ).src = `static/music/${randomMusic}`;
-      }, 10000); // 10000 밀리초(10초) 후에 실행
+      // // 10초 후에 음악을 재생
+      // setTimeout(function () {
+      //   document.getElementById(
+      //     "backgroundMusic"
+      //   ).src = `static/music/${randomMusic}`;
+      // }, 10000); // 10000 밀리초(10초) 후에 실행
 
-      intervalId = setInterval(captureAndUploadFrame, 10000);
+      intervalId = setInterval(captureAndUploadFrame, 1000);
     })
     .catch(function (error) {
       console.error("웹 카메라 액세스 오류:", error);
@@ -204,6 +207,7 @@ endButton.addEventListener("click", function () {
       .then(function (response) {
         if (response.ok) {
           console.log("촬영 정보가 서버로 전송되었습니다.");
+          return fetchData();
         } else {
           console.error("촬영 정보 전송 실패", response);
         }
@@ -211,6 +215,44 @@ endButton.addEventListener("click", function () {
       .catch(function (error) {
         console.error("촬영 정보 전송 중 오류 발생:", error);
       });
+
+    async function fetchData() {
+      try {
+        const response = await fetch(`/score/${nickname}`, {
+          method: "get",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+        console.log(responseData);
+
+        fetch(`/record/update/score/${nickname}`, {
+          method: "PUT", // PUT 메서드 사용
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(responseData),
+        })
+          .then(function (response) {
+            if (response.ok) {
+              console.log("수면 점수가 저장되었습니다");
+            } else {
+              console.error("수면 점수 전송 실패", response);
+            }
+          })
+          .catch(function (error) {
+            console.error("수면 점수 전송중 오류 발생:", error);
+          });
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
   }
 });
 
@@ -266,12 +308,10 @@ function sendImageToServer(formData) {
 
       console.log("현재 자세:", currentPosture);
       console.log("이전 자세:", latestPosture);
-
       // 이전 자세와 현재 자세를 비교하여 로직을 추가합니다.
       if (latestPosture == null) {
         // 최근 자세 정보 업데이트
         latestPosture = currentPosture;
-        callSavePostureApi(formData, data);
       }
       if (latestPosture !== null) {
         if (latestPosture !== currentPosture) {

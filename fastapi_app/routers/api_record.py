@@ -1,8 +1,7 @@
-from fastapi import APIRouter, File, UploadFile, Depends,Form, FastAPI
+from fastapi import APIRouter, File, UploadFile, Depends,Form
 from datetime import datetime
 import cv2
 import mediapipe as mp
-from itertools import count
 import os
 from fastapi_app.utils.pose_recognize.classify_pose import classify_pose
 from fastapi_app.utils.pose_recognize.detect_pose import detect_pose
@@ -18,7 +17,7 @@ from sqlalchemy.orm import Session
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose()
 
-app = FastAPI()
+
 
 # "Record"라는 태그를 가지며, 404 응답 코드에 대한 설명도 정의
 router = APIRouter(
@@ -75,15 +74,12 @@ async def upload_image(image: UploadFile):
 @router.post("/record/event_save")
 async def event_image_save(image: UploadFile, data: str = Form(...), sleep_info_id: int = Form(...), db: Session = Depends(get_db)):
     # 현재 날짜와 시간 생성
-    # current_date = datetime.now().strftime("%Y-%m-%d")
+    current_date = datetime.now().strftime("%Y-%m-%d")
     current_time = datetime.now().strftime("%H:%M:%S")
-
+    formatted_time = datetime.now().strftime("%H-%M-%S")
 
     # 파일 저장 이름 정의
-    file_path = f"static/images/pose/{data}_{current_time}.jpg"
-    #Db 저장 이름 정의
-    db_path = f"{data}_{current_time}.jpg"
-
+    file_path = f"static/images/pose/{current_date}_{formatted_time}_{data}.jpg"
     
     with open(file_path, "wb") as image_file:
         image_file.write(image.file.read())
@@ -101,7 +97,7 @@ async def event_image_save(image: UploadFile, data: str = Form(...), sleep_info_
         sleep_info_id=sleep_info_id,
         sleep_event=data,
         event_time=current_time,
-        event_data_path=db_path
+        event_data_path=file_path
     )
 
     db_sleep_event = create_sleep_event(db, sleep_event_data)
@@ -140,7 +136,14 @@ def update_sleep_info(nickname: str, sleep_info_data: SleepInfoUpdate, db: Sessi
    
     return updated_sleep_info
     
+# 수면 점수 업데이트
+@router.put("/record/update/score/{nickname}", response_model=SleepInfoScoreUpdate)
+def update_sleep_score_info(nickname: str, sleep_score_info_data : SleepInfoScoreUpdate, db : Session=Depends(get_db)):
 
+    update_sleep_score_info = update_score_info(db, nickname, sleep_score_info_data.total_sleep_score, sleep_score_info_data.sleep_time_score,
+                                                      sleep_score_info_data.start_sleep_time_score,  sleep_score_info_data.bad_position_score, sleep_score_info_data.position_change_score)
+
+    return update_sleep_score_info
 
 if __name__ == "__main__":
     
