@@ -49,12 +49,18 @@ class SleepTimelineResponse(BaseModel):
 
 
 @router.get("/timeline/search", response_model=SleepTimelineResponse)
-async def fetch_timeline_data(date: str, db: Session = Depends(get_db)):
+async def fetch_timeline_data(date: str, nickname: str, db: Session = Depends(get_db)):
     if not date:
         raise HTTPException(status_code=400, detail="Date parameter is required.")
 
     target_date = datetime.strptime(date, "%Y-%m-%d").date()
-    sleep_info_entries = db.query(SleepInfo).filter(SleepInfo.date == target_date).all()
+
+    # `SleepInfo`에서 `date`와 `nickname`을 만족하는 데이터만 필터링
+    sleep_info_entries = (
+        db.query(SleepInfo)
+        .filter(SleepInfo.date == target_date, SleepInfo.nickname == nickname)
+        .all()
+    )
 
     sleep_info_data = [
         {
@@ -67,11 +73,14 @@ async def fetch_timeline_data(date: str, db: Session = Depends(get_db)):
         for item in sleep_info_entries
     ]
 
+    # `SleepEvent`와 `SleepInfo`를 조인하여 두 조건을 만족하는 데이터만 필터링
     sleep_event_entries = (
         db.query(SleepEvent)
-        .filter(SleepEvent.sleep_info_id == SleepInfo.sleep_info_id)
+        .join(SleepInfo, SleepEvent.sleep_info_id == SleepInfo.sleep_info_id)
+        .filter(SleepInfo.nickname == nickname, SleepInfo.date == target_date)
         .all()
     )
+
     sleep_event_data = [
         {
             "sleep_event": item.sleep_event,
@@ -81,6 +90,6 @@ async def fetch_timeline_data(date: str, db: Session = Depends(get_db)):
         for item in sleep_event_entries
     ]
 
-    print(sleep_info_data, sleep_event_data)
+    # print(sleep_info_data, sleep_event_data)
 
     return {"sleep_info": sleep_info_data, "sleep_events": sleep_event_data}

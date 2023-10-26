@@ -75,3 +75,20 @@ document
       window.location.href = redirectURL;
     }
   });
+
+document
+  .getElementById("timelineButton")
+  .addEventListener("click", function () {
+    const nickname = document.getElementById("nickname").value;
+
+    // 닉네임이 비어 있는 경우 경고 메시지 표시하고 리다이렉트를 실행하지 않음
+    if (nickname.trim() === "") {
+      alert("닉네임을 입력해주세요.");
+    } else {
+      // 리다이렉트 URL을 생성하여 /record?nickname=에 닉네임을 추가합니다
+      const redirectURL = "/timeline?nickname=" + nickname;
+
+      // 페이지를 리다이렉트합니다
+      window.location.href = redirectURL;
+    }
+  });

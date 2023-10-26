@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from ..database import SessionLocal, engine
 from ..model import *
+from ..schemas import *
 
 router = APIRouter(
     tags=["Timeline"],
@@ -23,20 +24,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
-class SleepInfoBase(BaseModel):
-    nickname: str
-    date: str
-    total_sleep: str
-    start_sleep: str
-    end_sleep: str
-
-
-class SleepEventBase(BaseModel):
-    sleep_event: str
-    event_time: str
-    event_data_path: str
 
 
 @router.get("/timeline", response_class=HTMLResponse)

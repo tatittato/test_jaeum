@@ -1,7 +1,22 @@
+@font-face {
+  font-family: "Cafe24Oneprettynight";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Oneprettynight.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "Cafe24Oneprettynight";
+  font-size: 27px;
+  /* 여기에서 원하는 폰트 패밀리를 지정합니다. */
+}
+
 .container {
-  background-image: url("/static/images/night.jpg");
-  background-repeat: no-repeat; /* 이미지 반복 비활성화 */
+  position: relative; /* 부모 요소를 상대 위치로 설정 */
+  background-image: url("/static/images/img/night.jpg");
   background-position: center;
+  background-size: cover;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
@@ -23,7 +38,7 @@
 
 h1 {
   text-align: center;
-  color: #333;
+  color: #fff;
 }
 
 input[type="hidden"] {
@@ -34,6 +49,7 @@ video {
   display: block;
   margin: 0 auto;
   max-width: 100%;
+  border: solid 1px #fff;
 }
 
 .input-container {
@@ -50,12 +66,15 @@ input[name="nickname"] {
 
 .button-container {
   text-align: center;
-  margin-top: 20px;
 }
 
 button {
+  font-family: "Cafe24Oneprettynight";
+  font-size: 20px;
+  width: 150px; /* 원하는 폭으로 설정 */
+  height: 50px; /* 원하는 높이로 설정 */
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: rgba(0, 123, 255, 0); /* 투명한 배경 설정 */
   color: #fff;
   border: none;
   border-radius: 5px;

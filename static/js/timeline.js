@@ -10,10 +10,20 @@ document.querySelector(".timeline_btn").addEventListener("click", function () {
   let dateParts = selectedDate.split("-"); // ["YYYY", "MM", "DD"]
   let dateWithoutYear = dateParts.slice(1).join("-").replace("DD", "dd"); // "MM-dd"
 
-  fetch("/timeline/search?date=" + selectedDate)
+  const urlParams = new URLSearchParams(window.location.search);
+  const nickname = urlParams.get("nickname"); // URL에서 닉네임 가져오기
+
+  console.log(nickname);
+
+  fetch("/timeline/search?date=" + selectedDate + "&nickname=" + nickname)
     .then((response) => response.json())
     .then((mysql_data) => {
       var ctx = document.getElementById("myChart").getContext("2d");
+
+      if (!mysql_data.sleep_info || !mysql_data.sleep_info.length) {
+        alert("데이터가 존재하지 않습니다!");
+        return; // 데이터가 없으면 차트를 그리지 않음
+      }
 
       // 차트가 이미 있다면 삭제
       if (myChart) {

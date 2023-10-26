@@ -115,8 +115,8 @@ async def create_user(user: UserBase, db: Session = Depends(get_db)):
     return db_user
 
 # 수면 정보 생성
-@router.post("/record/create_sleep_info", response_model=SleepInfoBase)
-async def create_sleep_info(sleep_info: SleepInfoBase, db: Session = Depends(get_db) ):
+@router.post("/record/create_sleep_info", response_model=SleepInfoCreate)
+async def create_sleep_info(sleep_info: SleepInfoCreate, db: Session = Depends(get_db) ):
 
     db_sleep_info = create_db_sleep_info(db, sleep_info)
    
