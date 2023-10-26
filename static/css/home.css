@@ -1,7 +1,6 @@
 .container {
   position: relative; /* 부모 요소를 상대 위치로 설정 */
-  background-image: url("/static/images/night.jpg");
-  background-repeat: no-repeat;
+  background-image: url("/static/images/img/night.jpg");
   background-position: center;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

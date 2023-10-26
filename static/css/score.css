@@ -1,0 +1,54 @@
+body {
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  background: url(/static/images/img/night.jpg) center;
+  background-size: cover;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+h1 {
+  font-size: 30px;
+  margin: 10px;
+}
+
+p {
+  font-size: 16px;
+  margin: 10px;
+}
+
+#date {
+  margin: 50px;
+}
+
+#myChartBox {
+  margin: 0 auto;
+  display: block;
+  width: 700px;
+}
+
+#myChart {
+  width: 200px;
+}
+
+#toggleButton {
+  margin: 10px;
+  padding: 10px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#toggleMe {
+  display: none;
+  background-color: #fff;
+  color: dimgray;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+}

@@ -54,7 +54,7 @@ def process_image(image):
         labeled_image, labels = classify_pose(landmarks, landmarks_image, fps, frame_height, frame_width, display=False)
 
         # 배열을 문자열로 바꾸기
-        labels_str = ''.join(labels)
+        labels_str = ' '.join(labels)
 
         # 라벨링 되기 전 이미지는 삭제합니다.
         if os.path.exists(file_path):

@@ -39,4 +39,4 @@ class SleepEvent(Base):
 
 
 # 처음 한번만 생성
-# Base.metadata.create_all(engine)
+Base.metadata.create_all(engine)
