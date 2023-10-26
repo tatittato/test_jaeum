@@ -2,6 +2,9 @@
 // 그래프 위에 label 출력용 코드
 Chart.register(ChartDataLabels);
 
+const urlParams = new URLSearchParams(window.location.search);
+const nickname = urlParams.get("nickname"); // URL에서 닉네임 가져오기
+
 // 각종 변수들 전역선언
 let period;
 let period_canvas;
@@ -14,9 +17,11 @@ let sleeptime;
 // 일일 수면결과는 가져오는 함수가 있겠지? 거기서 나오는거 넣어서 하면댐; 
 
 // period_button, pose_button 눌렀을 때 active 된 것 바꿔주기 
-$(document).on('click', '.period_button', function(){
+$(document).on('click', '.period_button', function () {
   $('.period_button').parent('label').removeClass('active');
   $(this).parent('label').addClass('active');
+  $('.pose_buttons').children('label').removeClass('active');
+  $('input#front').parent('label').addClass('active');
 });
 
 $(document).on('click', '.pose_button', function(){
@@ -27,9 +32,10 @@ $(document).on('click', '.pose_button', function(){
 // 가장 위에 출력되는 7일간 수면현황 차트
 function get_default_chart(endpoint) {
   period = endpoint;
-  fetch("/statistics/" + endpoint + "/") // period를 변수로 선언
+  fetch("/statistics/" + nickname + "/" + endpoint + "/") // period를 변수로 선언
       .then(response => response.json())
-      .then(data => {
+    .then(data => {
+        console.log("get_default_chart내의 닉네임/엔드포인트(기간) " , nickname, "/", period, " = ", endpoint)
         let total_sleep_time = data.period_total;
         let average_sleep_time = data.period_average;
         let average_score = data.score_average;
@@ -50,7 +56,7 @@ function get_default_chart(endpoint) {
         create_default_chart(Object.keys(chart_data), Object.values(chart_data));
         let total = Object.values(chart_data).map(value => value[2]);
         console.log('get_default_chart 함수내의 패치함수에서 받아오는 total', total)
-        get_period_chart(Object.keys(chart_data), total);
+        create_period_chart(Object.keys(chart_data), total);
       })
       .catch(error => {
           console.log('데이터 에러:', error);
@@ -73,23 +79,17 @@ function generate_table_data_period(total_sleep_time, average_sleep_time, averag
 
 function get_period_data(endpoint){
   period = endpoint;
-  fetch("/statistics/" + endpoint + "/") // period를 변수로 선언
+  fetch("/statistics/" + nickname + "/" + endpoint + "/") // period를 변수로 선언
       .then(response => response.json())
       .then(data => {
-        // console.log("get_period_data에서 period변수 설정", period);
-
         // 기간별 수면현황에 날짜 찍어주기 (시작날짜 ~ 종료날짜)
         first_day = data.period_first_last[0];
         last_day = data.period_first_last[1];
-        // score_average = data.score_average;
 
         document.querySelector('#first_date').textContent = first_day;
         document.querySelector('#last_date').textContent = last_day;
 
         generate_table_data_period(data.period_total, data.period_average, data.score_average);
-
-        // console.log("get_period_data 함수내의 chart_data");
-        // console.log(chart_data);
         
         let chart_data = data.chart_data;
         let firstKey = Object.keys(chart_data)[0];
@@ -98,45 +98,36 @@ function get_period_data(endpoint){
           // (2) 형식의 데이터 처리
           let total = Object.values(chart_data).map(value => value.total);
           let average = Object.values(chart_data).map(value => value.average);
-          console.log("get_period_chart average1111", average)
-          get_period_chart(Object.keys(chart_data), average);
+          console.log("create_period_chart average1111", average)
+          create_period_chart(Object.keys(chart_data), average);
           console.log('if문')
         } else if (Array.isArray(chart_data[firstKey])) {
           // (1) 형식의 데이터 처리
           let total = Object.values(chart_data).map(value => value[2]);
-          get_period_chart(Object.keys(chart_data), total);
+          create_period_chart(Object.keys(chart_data), total);
           console.log('else문')
         } else {
+          // 데이터가 없는 기간 데이터(?) 예외처리
+          let average = 0;
+          create_period_chart("-", average)
           console.log('아무것도해당안댐ㅋ')
         }
         
-        // 기간을 새로 선택하면 선택한 기간의 새우잠 발생 횟수차트로 변경됨(default)
-        get_pose_chart(period, 'shrimp');
+        // 기간을 새로 선택하면 선택한 기간의 정면잠 발생 횟수차트로 변경됨(default)
+        create_pose_chart(period, 'front');
         $('.pose_button').parent('label').removeClass('active');
-        $('.pose_buttons label:first-child').addClass('active');
+        $('input#front').parent('label').addClass('active');
       })
       .catch(error => {
           console.log('데이터 에러:', error);
       });
 };
 
-// function calculateSleepDuration(start, end) {
-//   if (end > start) {
-//       return end - start;
-//   } else {
-//       // 자정을 넘어서의 수면을 고려하여 86400 (하루의 초)를 더한 후 차이를 계산
-//       return (end + 86400) - start;
-//   }
-// }
-
 // ▼▼▼▼▼▼ 주간 수면현황 차트 시작 ▼▼▼▼▼▼
 // 초로 환산시 : 0 ~ 24:00 =>  86,400초
 function create_default_chart(chart_label, sleeptime) {
-  // chart_label: 배열, sleeptime: 배열
-  // sleeptime간의 시간을 계산해야된다
   console.log('sleeptime에 전체 잠잔 시간이 들어있지않나?')
   for (let i = 0; i < sleeptime.length; i++){
-    // console.log(sleeptime[i][2])
     sleepDurations = sleeptime.map(time => time[2]);
   }
   console.log(sleepDurations)
@@ -152,8 +143,8 @@ function create_default_chart(chart_label, sleeptime) {
   
   let midtimes = [];
   sleeptime.forEach(item => {
-    console.log("item[0]: ", item[0], "item[1]: ", item[1]);
-    console.log("Math.abs(item[1] - item[0]): ", Math.abs(item[1] - item[0]));
+    // console.log("item[0]: ", item[0], "item[1]: ", item[1]);
+    // console.log("Math.abs(item[1] - item[0]): ", Math.abs(item[1] - item[0]));
     // 잠잔 시간이 10분이하면 midtimes 안나오게..
     if (Math.abs(item[1] - item[0]) > 600) {
       midtimes.push(find_midtime(item[0], item[1]));
@@ -165,10 +156,6 @@ function create_default_chart(chart_label, sleeptime) {
   console.log('midtimes 값을')
   console.log(midtimes)
 
-  // 시작시간부터 얼마나 잤는가 계산해서 chart에 표시 (end_time이 안먹어서 차선책으로 함수생성)
-  // const sleepDurations = sleeptime.map(time => calculateSleepDuration(time[0], time[1]));
-  // console.log('sleepDurations 보자고')
-  // console.log(sleepDurations)
   const minTime = Math.min(...sleeptime.map(time => time[0]));
   const maxTime = Math.max(...sleeptime.map(time => time[1])) + 86400;
 
@@ -176,13 +163,10 @@ const data = {
   labels: chart_label,
   datasets: [
     {
-      label: 'midtime',
+      label: '수면 중간시간',
       type: "line",
       data: midtimes,
-      // pointBackgroundColor: "#66B2ff",
       pointBackgroundColor: "#6666ff",
-      // pointBackgroundColor: 'brown',
-      // showLine: false,
       tension: 0.5,
       backgroundColor: "#6666ff",
       fill: false,
@@ -190,7 +174,6 @@ const data = {
     }, {
       label: '수면 시간',
       data: sleeptime.map((time, i) => [time[0], time[0] + sleepDurations[i]]),
-      // data: sleeptime.map((time, i) => [time[0], time[0] + sleepDurations[i]]),
       backgroundColor: 'rgba(237, 254, 255, 1)',
       datalabels: { display:false }
     }]
@@ -223,9 +206,7 @@ const data = {
       }, 
       elements: {
         line: {
-          // backgroundColor: 'brown',
           borderColor: "#66B2ff"
-          // borderColor: "#6666ff"
         },
         bar: {
           borderRadius: 5,
@@ -265,10 +246,10 @@ const data = {
         
             if (secs > 0) {
               console.log("secoundsToHMS secs");
-              console.log(secs);
+              // console.log(secs);
               midtime += `${String(secs).padStart(2,'0')}초`;
             } else {
-              console.log(secs);
+              // console.log(secs);
             }
             
             if (sleepDurations[tooltipItem.dataIndex] < 180) {
@@ -276,12 +257,11 @@ const data = {
             }
         
             duration = secondsToHMS_total(sleepDurations[tooltipItem.dataIndex]);
-            return [`수면시간: ${duration}`, `수면 midtime: ${midtime}`];
+            return [`수면시간: ${duration}`, `수면 중간시간: ${midtime}`];
           }
         }
       },
       legend: {
-        // display: false,
         labels: {
           color: '#fff'
         }
@@ -301,8 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 디폴트 차트 출력: 기간별(week) + 포즈(shrimp) 
   get_default_chart("week");
-  // get_period_data("week");
-  get_pose_chart("week", "shrimp");
+  get_pose_chart("week", "front");
 });
 
 let sleepDateChart;
@@ -313,38 +292,22 @@ let sleepDateChart;
     let minutes = Math.floor((seconds % 3600) / 60);
     let secs = seconds % 60;
     if (hours < 0) {
-      // console.log("secoundsToHMS hours");
-      // console.log(hours);
-
       phrase = " ";
     } else if (hours > 24) {
-      // console.log("secoundsToHMS hours");
-      // console.log(hours);
       hours = hours - 24;
       phrase = `${String(hours)}시간 `;
     } else {
-      // console.log("secoundsToHMS hours");
-      // console.log(hours);
       phrase = `${String(hours)}시간 `;
     }
-
     // 00분, 00초는 출력하지않음
     if (minutes > 0) {
-      // console.log("secoundsToHMS minutes");
-      // console.log(minutes);
       phrase += `${String(minutes).padStart(2, '0')}분 `
-    } else { 
-      // console.log("secoundsToHMS minutes");
-      // console.log(minutes);
-    }
+    } 
 
     if (secs > 0) {
       console.log("secoundsToHMS secs");
-      console.log(secs);
+      // console.log(secs);
       phrase += `${String(secs).padStart(2,'0')}초`;
-    } else {
-      console.log("secoundsToHMS secs");
-      console.log(secs);
     }
     
     return phrase;
@@ -368,12 +331,12 @@ function secondsToHMS_total(seconds) {
 };
   
   // ▼▼▼▼▼▼ 기간별 평균 수면시간 ▼▼▼▼▼▼
-  function get_period_chart(chart_label, sleeptime){ // keys, value에서 토탈값만
+  function create_period_chart(chart_label, sleeptime){ // keys, value에서 토탈값만
     if(sleepDateChart){
       sleepDateChart.destroy();
     }
 
-    console.log("get_period_chart 함수 내의 sleeptime 받아오는가? ");
+    console.log("create_period_chart 함수 내의 sleeptime 받아오는가? ");
     console.log(sleeptime);
 
     sleepDateChart = new Chart(period_canvas, {
@@ -386,12 +349,12 @@ function secondsToHMS_total(seconds) {
               backgroundColor: 'rgba(237, 254, 255, 1)'
           }]
       }, options: {
+        responsive: true,
         indexAxis: 'y',
         scales: {
           x: {
             grid: {
               color: 'rgba(250, 250, 255, 0.21)'
-              // display: false
             },
             min: 0,
             stepSize: 1,
@@ -418,25 +381,12 @@ function secondsToHMS_total(seconds) {
         plugins: {
           tooltip: {
             enabled: false,
-            // callbacks: {
-            //   label: function (context) {
-            //     if (context.formattedValue == " ") {
-            //       return context.formattedValue
-            //     }
-            //     const contextValue = context.formattedValue.replace(/,/g, ''); 
-            //     const numVal = Number(contextValue);
-            //     return secondsToHMS(numVal)
-            //   }
-            // }
           },
           datalabels: {
             color: '#232324',
-            // color: 'rgba(2, 3, 47, 0.8)',
-            // font: { weight: 'bold' },
-            // color: 'rgba(2, 3, 47, 0.8)',
             formatter: (value) => {
-              console.log("기간별 수면평균 value")
-              console.log(value)
+              // console.log("기간별 수면평균 value")
+              // console.log(value)
               if (value == " ") {
                 return value
               } else if (value < 600) {
@@ -448,9 +398,6 @@ function secondsToHMS_total(seconds) {
           },
           legend: {
             display:false,
-            // labels: {
-            //   color: '#fff'
-            // }
           }
         }
       }
@@ -477,7 +424,6 @@ function create_pose_chart(pose_label, pose_values){
           y: {
             grid: {
               color: 'rgba(250, 250, 255, 0.21)'
-              // display: false
             },
             beginAtZero: true,
             ticks: {
@@ -506,7 +452,6 @@ function create_pose_chart(pose_label, pose_values){
               align: 'center',
               anchor: 'center',
               color: '#232324',
-              // color: 'rgba(2, 3, 47, 0.8)',
               font: {
                   weight: 'bold'
           }, formatter: (value) => {
@@ -518,9 +463,6 @@ function create_pose_chart(pose_label, pose_values){
         },
         legend: {
           display: false,
-          // labels: {
-          //   color: '#fff'
-          // }
           }
         }
     }
@@ -531,10 +473,10 @@ let sleepPoseChart;
 
 // 포즈차트 비동기(fetch)
 function get_pose_chart(period, endpoint){
-  fetch("/statistics/"+ period + "/" + endpoint + "/")
+  fetch("/statistics/" + nickname + "/" + period + "/" + endpoint + "/")
       .then(response => response.json())
     .then(data => {
-      console.log('get_pose_chart의 기간/엔드포인트', period, '/', endpoint)
+      console.log('get_pose_chart의 닉네임/기간/엔드포인트', nickname, '/', period, '/', endpoint)
       let chart_data = data.chart_data;
 
       // key값은 날짜
@@ -549,4 +491,14 @@ function get_pose_chart(period, endpoint){
       });
 };
 
-
+// 페이지 상단으로 가는 버튼
+function scrollToTop() {
+  const scrollDuration = 250; 
+  const scrollStep = -window.scrollY / (scrollDuration / 15),
+        scrollInterval = setInterval(function(){
+          if (window.scrollY != 0) {
+              window.scrollBy(0, scrollStep);
+          }
+          else clearInterval(scrollInterval); 
+        },15);
+}
