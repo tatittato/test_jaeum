@@ -1,44 +1,36 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <title>웹 카메라 촬영</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/record.css" />
-  </head>
-  <body>
-    <audio id="backgroundMusic" controls autoplay>
-      <source src="static/music/{{randomMusic}}" type="audio/mpeg" />
-    </audio>
+{% extends "header.html" %} {% block content %}
+<link rel="stylesheet" type="text/css" href="/static/css/record.css" />
 
-    <div class="container">
-      <h1>수면 측정</h1>
+<div class="container-fluid">
+  <audio id="backgroundMusic" controls autoplay>
+    <source src="static/music/{{randomMusic}}" type="audio/mpeg" />
+  </audio>
 
-      <!-- 닉네임 입력칸 -->
-      <input
-        type="hidden"
-        id="nickname"
-        name="nickname"
-        value="{{ nickname }}"
-      />
-      <input type="hidden" id="sleep_info_id" value="{{ sleep_info_id }}" />
-      <!-- 웹캠 -->
-      <br />
-      <div>
-        <video id="camera" autoplay></video>
-      </div>
-      <br />
-      <div class="button-container">
-        <button id="captureButton">측정</button>
-        <button id="endButton">종료</button>
-      </div>
+  <div class="container">
+    <h1>수면 측정</h1>
+    <!-- 닉네임 입력칸 -->
+    <input type="hidden" id="nickname" name="nickname" value="{{ nickname }}" />
+    <input type="hidden" id="sleep_info_id" value="{{ sleep_info_id }}" />
+    <!-- 웹캠 -->
+    <video id="camera" autoplay></video>
+    <div class="button-container">
+      <button id="captureButton">촬영</button>
+      <button id="endButton">종료</button>
     </div>
-    <!-- <p id="sleep_info_id">{{sleep_info_id}}</p> -->
-
-    <script src="static/js/record.js"></script>
-  </body>
-</html>
+  </div>
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <!-- <p id="sleep_info_id">{{sleep_info_id}}</p> -->
+</div>
+<script src="static/js/record.js"></script>
+{% endblock %}

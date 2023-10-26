@@ -1,5 +1,8 @@
 let myChart;
 
+const nickname = localStorage.getItem("nickname");
+console.log("home에서 로컬에 저장한 닉넴", nickname);
+
 document.addEventListener("DOMContentLoaded", function () {
   let today = new Date().toISOString().substr(0, 10);
   document.querySelector("#dateInput").value = today;

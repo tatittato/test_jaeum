@@ -2,8 +2,8 @@
 // 그래프 위에 label 출력용 코드
 Chart.register(ChartDataLabels);
 
-const urlParams = new URLSearchParams(window.location.search);
-const nickname = urlParams.get("nickname"); // URL에서 닉네임 가져오기
+// const urlParams = new URLSearchParams(window.location.search);
+// const nickname = urlParams.get("nickname"); // URL에서 닉네임 가져오기
 
 // 각종 변수들 전역선언
 let period;
@@ -14,7 +14,11 @@ let rawData;
 let chart_label;
 let sleeptime;
 
-// 일일 수면결과는 가져오는 함수가 있겠지? 거기서 나오는거 넣어서 하면댐; 
+
+function getQueryParameter(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
 
 // period_button, pose_button 눌렀을 때 active 된 것 바꿔주기 
 $(document).on('click', '.period_button', function () {
@@ -99,8 +103,9 @@ function get_period_data(endpoint){
           let total = Object.values(chart_data).map(value => value.total);
           let average = Object.values(chart_data).map(value => value.average);
           console.log("create_period_chart average1111", average)
-          create_period_chart(Object.keys(chart_data), average);
+          console.log(Object.keys(chart_data))
           console.log('if문')
+          create_period_chart(Object.keys(chart_data), average);
         } else if (Array.isArray(chart_data[firstKey])) {
           // (1) 형식의 데이터 처리
           let total = Object.values(chart_data).map(value => value[2]);
@@ -114,7 +119,7 @@ function get_period_data(endpoint){
         }
         
         // 기간을 새로 선택하면 선택한 기간의 정면잠 발생 횟수차트로 변경됨(default)
-        create_pose_chart(period, 'front');
+        get_pose_chart(endpoint, "front");
         $('.pose_button').parent('label').removeClass('active');
         $('input#front').parent('label').addClass('active');
       })
@@ -245,7 +250,7 @@ const data = {
             }
         
             if (secs > 0) {
-              console.log("secoundsToHMS secs");
+              // console.log("secoundsToHMS secs");
               // console.log(secs);
               midtime += `${String(secs).padStart(2,'0')}초`;
             } else {
@@ -272,6 +277,9 @@ const data = {
 
 const seven_days_chart = new Chart(sevendays_canvas, config);
 }
+
+const nickname = localStorage.getItem('nickname');
+console.log("home에서 로컬에 저장한 닉넴", nickname);
 
 // ★ 이벤트 리스너 (즉시실행) page 로드되면 실행할 것 ★
 document.addEventListener("DOMContentLoaded", function () {
@@ -305,7 +313,7 @@ let sleepDateChart;
     } 
 
     if (secs > 0) {
-      console.log("secoundsToHMS secs");
+      // console.log("secoundsToHMS secs");
       // console.log(secs);
       phrase += `${String(secs).padStart(2,'0')}초`;
     }
@@ -334,6 +342,10 @@ function secondsToHMS_total(seconds) {
   function create_period_chart(chart_label, sleeptime){ // keys, value에서 토탈값만
     if(sleepDateChart){
       sleepDateChart.destroy();
+    }
+
+    if (sleeptime < 180) {
+      sleeptime = 0;
     }
 
     console.log("create_period_chart 함수 내의 sleeptime 받아오는가? ");
@@ -385,8 +397,6 @@ function secondsToHMS_total(seconds) {
           datalabels: {
             color: '#232324',
             formatter: (value) => {
-              // console.log("기간별 수면평균 value")
-              // console.log(value)
               if (value == " ") {
                 return value
               } else if (value < 600) {
@@ -409,6 +419,8 @@ function create_pose_chart(pose_label, pose_values){
   if(sleepPoseChart){
     sleepPoseChart.destroy();
   }
+
+  console.log('자세별 발생횟수 차트의  라벨', pose_label);
 
   sleepPoseChart = new Chart(pose_canvas, {
     type: 'bar',

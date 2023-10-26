@@ -1,65 +1,58 @@
 <!DOCTYPE html>
-<html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <title>Document</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <link rel="stylesheet" type="text/css" href="static/css/score.css" />
-  </head>
-  <body>
-    <label for="date"
-      >날짜를 선택하세요:
-      <input type="date" id="selectedDate" value="date" />
-    </label>
+{% extends "header.html" %} {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/score.css" />
 
-    <h1>
-      <span id="nickname"></span> 님의 수면점수는
-      <span id="sleep_score"></span> 점 입니다
-    </h1>
+<div class="contain container-fluid">
+  <label for="date"
+    >날짜를 선택하세요:
+    <input type="date" id="selectedDate" value="date" />
+  </label>
 
-    <div id="myChartBox">
-      <canvas id="myChart"></canvas>
-    </div>
+  <h1>
+    <span id="nickname"></span> 님의 수면점수는
+    <span id="sleep_score"></span> 점 입니다
+  </h1>
 
-    <div id="total_sleep_time"></div>
+  <div id="myChartBox">
+    <canvas id="myChart"></canvas>
+  </div>
 
-    <button id="toggleButton">점수 기준 보기</button>
+  <div id="total_sleep_time"></div>
 
-    <div id="toggleMe" style="display: none">
-      <h3>첫번째 수면시간</h3>
-      수면시간이 7시간~9시간 사이면 25점<br />
-      수면시간이 9시간 초과이면 20점<br />
-      수면시간이 4시간~7시간 사이면 15점<br />
-      수면시간이 4시간 미만이면 10점<br />
-      수면시간이 2시간 미만이면 0점<br />
+  <button id="toggleButton">점수 기준 보기</button>
 
-      <h3>2번째 바르지 않은 자세로 잔 비율</h3>
-      바르지 않은 자세로 잔 시간이 수면시간의 71%~100% 이하이면 0점<br />
-      바르지 않은 자세로 잔 시간이 수면시간의 51%~70% 이면 10점<br />
-      바르지 않은 자세로 잔 시간이 수면시간의 21%~50% 이면 20점<br />
-      바르지 않은 자세로 잔 시간이 수면시간의 20% 이하이면 25점<br />
+  <div id="toggleMe" style="display: none">
+    <h3>첫번째 수면시간</h3>
+    수면시간이 7시간~9시간 사이면 25점<br />
+    수면시간이 9시간 초과이면 20점<br />
+    수면시간이 4시간~7시간 사이면 15점<br />
+    수면시간이 4시간 미만이면 10점<br />
+    수면시간이 2시간 미만이면 0점<br />
 
-      <h3>3번째 자세를 바꾼 횟수</h3>
-      자세를 바꾼 횟수가 16 이상이면 5점<br />
-      자세를 바꾼 횟수가 11~15번 이면 10점<br />
-      자세를 바꾼 횟수가 6~10번 이면 20점<br />
-      자세를 바꾼 횟수가 0~5번 이면 25점<br />
+    <h3>2번째 바르지 않은 자세로 잔 비율</h3>
+    바르지 않은 자세로 잔 시간이 수면시간의 71%~100% 이하이면 0점<br />
+    바르지 않은 자세로 잔 시간이 수면시간의 51%~70% 이면 10점<br />
+    바르지 않은 자세로 잔 시간이 수면시간의 21%~50% 이면 20점<br />
+    바르지 않은 자세로 잔 시간이 수면시간의 20% 이하이면 25점<br />
 
-      <h3>4번째 잠에 든 시간</h3>
-      밤 8시~11시 사이에 잠들었다면 25점<br />
-      밤 11시~12시 사이에 잠들었다면 20점<br />
-      밤 12시~1시 사이에 잠들었다면 15점<br />
-      밤 1시~2시 사이에 잠들었다면 10점<br />
-      밤 2시 ~5시 사이에 잠들었다면 5점<br />
-      이외의 시간에 잠들었다면 0점
-    </div>
+    <h3>3번째 자세를 바꾼 횟수</h3>
+    자세를 바꾼 횟수가 16 이상이면 5점<br />
+    자세를 바꾼 횟수가 11~15번 이면 10점<br />
+    자세를 바꾼 횟수가 6~10번 이면 20점<br />
+    자세를 바꾼 횟수가 0~5번 이면 25점<br />
 
-    <script src="static/js/score.js"></script>
-  </body>
-</html>
+    <h3>4번째 잠에 든 시간</h3>
+    밤 8시~11시 사이에 잠들었다면 25점<br />
+    밤 11시~12시 사이에 잠들었다면 20점<br />
+    밤 12시~1시 사이에 잠들었다면 15점<br />
+    밤 1시~2시 사이에 잠들었다면 10점<br />
+    밤 2시 ~5시 사이에 잠들었다면 5점<br />
+    이외의 시간에 잠들었다면 0점
+  </div>
+</div>
+
+<script src="/static/js/score.js"></script>
+
+{% endblock %}

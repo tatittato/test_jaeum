@@ -14,11 +14,8 @@ let latestPosture = null;
 let changedPostureCount = 0;
 let changingPosture = null;
 
-// function setFrameInterval() {
-//   // 10초에 한 번 프레임 캡처 및 업로드
-//   timeoutHandlerId = null;
-//   intervalId = setInterval(captureAndUploadFrame, 10000);
-// }
+const nickname = localStorage.getItem('nickname');
+console.log("home에서 로컬에 저장한 닉넴", nickname);
 
 // 촬영 시작 및 종료 시간을 Date 객체로 변환
 

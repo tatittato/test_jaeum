@@ -1,0 +1,37 @@
+/* @font-face {
+  font-family: "Cafe24Oneprettynight";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Oneprettynight.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+} */
+
+.dropdown img {
+  width: 20px;
+  height: 20px;
+}
+
+button.btn.btn-secondary.dropdown-toggle {
+  position: fixed;
+  top: 0;
+  right: 0;
+  border: none;
+  outline: none;
+  background-color: rgba(123, 123, 123, 0.854);
+}
+.dropdown-item:hover {
+  cursor: pointer;
+}
+
+button.btn.btn-secondary.dropdown-toggle:hover,
+button.btn.btn-secondary.dropdown-toggle:active,
+button.btn.btn-secondary.dropdown-toggle:focus {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+.dropdown-menu.show {
+  transform: translate3d(388px, 33px, 0px) !important;
+  background-color: rgba(212, 212, 212, 0.596);
+}

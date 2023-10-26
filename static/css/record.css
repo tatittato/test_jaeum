@@ -1,26 +1,10 @@
-@font-face {
-  font-family: "Cafe24Oneprettynight";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Oneprettynight.woff")
-    format("woff");
-  font-weight: normal;
-  font-style: normal;
-}
-
-body {
-  font-family: "Cafe24Oneprettynight";
-  font-size: 27px;
-  /* 여기에서 원하는 폰트 패밀리를 지정합니다. */
-}
-
-.container {
-  position: relative; /* 부모 요소를 상대 위치로 설정 */
+/* .container-fluid {
   background-image: url("/static/images/img/night.jpg");
-  background-position: center;
-  background-size: cover;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   text-align: center;
+  height:100%;
   position: fixed;
   top: 0;
   left: 0;
@@ -30,7 +14,20 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+} */
+
+div.container-fluid {
+  background-image: url(../background/night.jpg);
+  background-size: cover;
+  background-color: black;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgb(221, 221, 221);
 }
+
+/* div.container {
+} */
 
 #backgroundMusic {
   display: none;
@@ -38,7 +35,7 @@ body {
 
 h1 {
   text-align: center;
-  color: #fff;
+  color: rgb(221, 221, 221);
 }
 
 input[type="hidden"] {
@@ -49,7 +46,6 @@ video {
   display: block;
   margin: 0 auto;
   max-width: 100%;
-  border: solid 1px #fff;
 }
 
 .input-container {
@@ -66,15 +62,12 @@ input[name="nickname"] {
 
 .button-container {
   text-align: center;
+  margin-top: 20px;
 }
 
 button {
-  font-family: "Cafe24Oneprettynight";
-  font-size: 20px;
-  width: 150px; /* 원하는 폭으로 설정 */
-  height: 50px; /* 원하는 높이로 설정 */
   padding: 10px 20px;
-  background-color: rgba(0, 123, 255, 0); /* 투명한 배경 설정 */
+  background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 5px;
