@@ -1,10 +1,26 @@
+@font-face {
+  font-family: "Cafe24Oneprettynight";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Oneprettynight.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "Cafe24Oneprettynight";
+  font-size: 27px;
+  /* 여기에서 원하는 폰트 패밀리를 지정합니다. */
+}
+
 /* .container-fluid {
   background-image: url("/static/images/img/night.jpg");
+  background-position: center;
+  background-size: cover;
+  background-color: black;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   text-align: center;
-  height:100%;
   position: fixed;
   top: 0;
   left: 0;
@@ -16,10 +32,12 @@
   align-items: center;
 } */
 
-div.container-fluid {
+body {
   background-image: url(../background/night.jpg);
   background-size: cover;
   background-color: black;
+  background-attachment: fixed;
+  background-size: 100% 100%;
   padding: 0;
   margin: 0;
   font-size: 0.85rem;
@@ -34,6 +52,7 @@ div.container-fluid {
 }
 
 h1 {
+  font-family: "Cafe24Oneprettynight";
   text-align: center;
   color: rgb(221, 221, 221);
 }
@@ -45,7 +64,9 @@ input[type="hidden"] {
 video {
   display: block;
   margin: 0 auto;
+  width: 100%;
   max-width: 100%;
+  border: 1px solid #fff;
 }
 
 .input-container {
@@ -53,26 +74,25 @@ video {
   margin-top: 20px;
 }
 
-input[name="nickname"] {
-  margin: 0 auto;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
 .button-container {
-  text-align: center;
-  margin-top: 20px;
+  display: flex;
+  justify-content: space-around; /* Adjust the space between the buttons */
+  margin-top: 20px; /* Adjust the margin as needed */
 }
 
-button {
-  padding: 10px 20px;
-  background-color: #007bff;
+.button-container button {
+  text-align: center;
+  font-family: "Cafe24Oneprettynight";
+  font-size: 20px;
+  border-radius: 5px;
+  width: 30%; /* Adjust button width as needed */
+  height: 40px;
+  padding: 8px 16px;
+  background-color: rgba(0, 123, 255, 0);
   color: #fff;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
-  margin: 5px;
+  margin: 5px 0; /* Adjust vertical margin to separate the buttons */
 }
 
 button:hover {

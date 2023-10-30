@@ -10,6 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   saveButton?.addEventListener("click", () => {
     const nickname = nicknameInput.value;
+
+    // 닉네임이 없거나 2글자 미만인 경우 메시지를 표시하고 생성을 중단
+    if (!nickname || nickname.length < 2) {
+      alert("닉네임은 2글자 이상 입력해주세요!");
+      return;
+    }
+
     const userData = { nickname };
 
     fetch("/record/create_user", {
@@ -21,12 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        alert("사용자가 생성되었습니다.");
+        alert("닉네임이 생성되었습니다.");
         localStorage.setItem("nickname", nickname); // 닉네임 로컬 스토리지에 저장
         location.reload();
       })
       .catch((error) => {
-        alert("사용자 생성에 실패했습니다.");
+        alert("이미 존재하는 닉네임입니다.");
       });
   });
 
