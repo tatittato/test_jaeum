@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 DATABASE_URL = "mysql://{}:{}@{}:{}/{}?charset=utf8mb4".format(
-    "root", "12341234", "127.0.0.1", 3306, "jaeum"
+    "jaeum", "12341234", "127.0.0.1", 3306, "jaeum"
 )
 # Dependency
 def get_db():
