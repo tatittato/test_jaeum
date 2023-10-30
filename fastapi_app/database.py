@@ -3,8 +3,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 DATABASE_URL = "mysql://{}:{}@{}:{}/{}?charset=utf8mb4".format(
-    "jaeum", "12341234", "127.0.0.1", 3306, "jaeum"
+    "root", "1234", "127.0.0.1", 3306, "jaeum"
 )
+
+
 # Dependency
 def get_db():
     db = SessionLocal()
@@ -12,6 +14,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 # 엔진생성
 engine = create_engine(DATABASE_URL)
