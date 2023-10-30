@@ -32,6 +32,6 @@ button.btn.btn-secondary.dropdown-toggle:focus {
   cursor: pointer;
 }
 .dropdown-menu.show {
-  transform: translate3d(370px, 33px, 0px) !important;
+  transform: translate3d(210px, 33px, 0px) !important;
   background-color: rgba(212, 212, 212, 0.596);
 }

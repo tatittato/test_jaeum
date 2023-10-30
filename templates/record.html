@@ -8,29 +8,27 @@
   </audio>
 
   <div class="container">
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
     <h1>수면 측정</h1>
     <!-- 닉네임 입력칸 -->
     <input type="hidden" id="nickname" name="nickname" value="{{ nickname }}" />
     <input type="hidden" id="sleep_info_id" value="{{ sleep_info_id }}" />
     <!-- 웹캠 -->
+    <br />
     <video id="camera" autoplay></video>
+    <br />
     <div class="button-container">
       <button id="captureButton">촬영</button>
       <button id="endButton">종료</button>
     </div>
   </div>
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <!-- <p id="sleep_info_id">{{sleep_info_id}}</p> -->
 </div>
 <script src="static/js/record.js"></script>
 {% endblock %}

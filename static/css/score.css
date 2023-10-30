@@ -8,9 +8,8 @@
 
 div.container-fluid {
   font-family: "Cafe24Oneprettynight";
-  height: 100vh;
   background: url(/static/images/img/night.jpg) center;
-  background-size: cover;
+  background-size: 100% 100%;
   color: #fff;
   margin: 0;
   padding: 0;
@@ -36,17 +35,17 @@ div.container-fluid {
 }
 
 #nickname {
-  color:#FF9999
+  color: #ff9999;
 }
 
-#sleep_score{
-  color:#FF9999
+#sleep_score {
+  color: #ff9999;
 }
 
-#scoreChartBox{
+#scoreChartBox {
   width: 370px;
   height: 400px;
-  margin:0 auto;
+  margin: 0 auto;
   padding: 15px 0;
 }
 
@@ -63,21 +62,21 @@ div.container-fluid {
 #scoreStandardToggle {
   display: none;
   background-color: #fff;
-  color:dimgray;
+  color: dimgray;
   border: 1px solid #ccc;
   padding: 10px;
   margin: 10px;
   border-radius: 5px;
 }
 
-input[type='date'] {
-  border: none; 
+input[type="date"] {
+  border: none;
   position: relative;
   padding: 10px;
   padding-right: 50px;
   background: url(/static/images/img/calendar.png) no-repeat right 10px center /
-  35px auto; 
-  background-color:rgba(255, 255, 255, 0.5);
+    35px auto;
+  background-color: rgba(255, 255, 255, 0.5);
   box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   text-align: center;
@@ -85,14 +84,13 @@ input[type='date'] {
   margin-bottom: 20px;
 }
 
-
 input[type="date"]::-webkit-calendar-picker-indicator {
   position: absolute;
-  left:0;
-  top:0;
+  left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
-  background: transparent; 
+  background: transparent;
   color: transparent;
-  cursor:pointer;
+  cursor: pointer;
 }

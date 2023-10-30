@@ -8,8 +8,8 @@
 
 .container-fluid {
   background: url(/static/images/img/night.jpg);
-  background-size: cover;
-  height: 100vh;
+  background-size: 100% 100%;
+  height: 200vh;
   color: #fff;
   margin: 0;
   padding: 0;

@@ -1,15 +1,22 @@
-.container {
-  position: relative; /* 부모 요소를 상대 위치로 설정 */
+@font-face {
+  font-family: "Cafe24Oneprettynight";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Cafe24Oneprettynight.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "Cafe24Oneprettynight";
+  font-size: 27px;
   background-image: url("/static/images/img/night.jpg");
   background-position: center;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-size: cover;
+  background-color: black;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  padding: 10px;
   text-align: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,8 +28,13 @@ h1 {
 }
 
 p {
-  color: #666;
-  margin-bottom: 20px;
+  font-size: 20px;
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+img {
+  width: 200px;
 }
 
 .button-container {
@@ -30,13 +42,18 @@ p {
 }
 
 button {
-  padding: 10px 20px;
-  background-color: #007bff;
+  font-family: "Cafe24Oneprettynight";
+  font-size: 20px;
+  width: 35%;
+  height: 40px;
+  padding: 8px 16px;
+  margin: 5px 0;
+  background-color: rgba(0, 123, 255, 0); /* 투명한 배경 설정 */
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin: 5px;
+  margin: 5px, 0;
 }
 
 button:hover {
@@ -45,30 +62,25 @@ button:hover {
 
 .input-container {
   text-align: center;
-  margin: 20px 0;
+  margin-top: 20px;
 }
 
 input[name="nickname"] {
-  margin: 0 auto;
+  display: block; /* Ensures centering */
+  margin: 0 auto; /* Center horizontally */
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #fff;
+  background-color: rgba(0, 123, 255, 0);
   border-radius: 5px;
-  font-size: 16px;
+  color: #fff;
+  font-family: "Cafe24Oneprettynight";
+  font-size: 20px;
+  width: 50%;
   text-align: center;
 }
 
 input[name="nickname"]::placeholder {
   color: #999;
-}
-
-#menu button {
-  position: absolute;
-  top: 150px;
-  left: 150px;
-  transform: translate(-50%, 0);
-}
-
-button#menu img {
-  width: 30px;
-  height: 30px;
+  font-family: "Cafe24Oneprettynight";
+  font-size: 20px;
 }
