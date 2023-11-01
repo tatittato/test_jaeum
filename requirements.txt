@@ -8,3 +8,4 @@ mediapipe
 opencv-python
 sqlalchemy
 pandas
+openai
