@@ -8,6 +8,7 @@ from ..model import *
 from fastapi.responses import JSONResponse
 from sqlalchemy import desc
 from datetime import datetime, timedelta, date
+import pandas as pd
 
 templates = Jinja2Templates(directory="templates")
 
@@ -45,6 +46,26 @@ async def get_score(request: Request, nickname: str , date : date , db: Session 
     sleeptimeget = db.query(model.SleepInfo.total_sleep).filter(model.SleepInfo.nickname == nickname, model.SleepInfo.date == date).first()
     starttimeget = db.query(model.SleepInfo.start_sleep).filter(model.SleepInfo.nickname == nickname, model.SleepInfo.date == date).first()
 
+ ##### 다운 dataframe 테스트 #####
+    timedada = db.query(model.SleepInfo.total_sleep, model.SleepInfo.start_sleep, model.SleepInfo.total_sleep_score, model.SleepInfo.position_change_score, \
+                    model.SleepInfo.bad_position_score, model.SleepInfo.sleep_time_score, model.SleepInfo.start_sleep_time_score,).filter(model.SleepInfo.nickname == nickname)\
+                    .filter(model.SleepInfo.date == date).all()
+
+    sleepdada = db.query(model.SleepEvent.sleep_event_id, model.SleepEvent.sleep_event, model.SleepEvent.event_time).filter(model.SleepInfo.nickname == nickname).filter(model.SleepInfo.date==date).all()
+    timddadaDf = pd.DataFrame(timedada)
+    sleepdadaDf = pd.DataFrame(sleepdada)
+    print(sleepdadaDf.columns)
+    # sleepdadaDf['event_time'] = pd.to_datetime(sleepdadaDf['event_time'])
+
+    print('time')
+    print(timedada)
+    print('sleepdada')
+    print(sleepdada)
+    print('timddadaDf')
+    print(timddadaDf)
+    print('sleepdadaDf')
+    print(sleepdadaDf)
+    ###############################
 
     #나쁜 자세로 잔 시간 가져오기
     sleep_event = db.query(model.SleepEvent.sleep_event).\
