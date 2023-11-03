@@ -1,9 +1,31 @@
 import pandas as pd
 import numpy as np
+from datetime import timedelta, date
+from dateutil.relativedelta import relativedelta
 
 def time_str_to_seconds(time_str):
     hours, minutes, seconds = map(int, time_str.split(":"))
     return int(np.array([hours * 3600 + minutes * 60 + seconds]))
+
+today = date.today()
+end_day = today
+
+def decide_start_day_by_period(period):
+  end_day = today
+  if period == "week": # 조회 당일을 기준(end_parameter) 6일전(start_parameter)
+      start_day = end_day - timedelta(days=6)
+  elif period == "month": # 조회 당월을 기준(end_parameter) 당월 데이터만!
+      start_day = date(today.year, end_day.month, 1)
+  elif period == "sixmonths": # 조회 당월을 기준, 5개월 전까지 (총 6개월)
+      start_day = end_day - relativedelta(months=5)
+      start_day = date(start_day.year, start_day.month, 1)
+  elif period == "year": # 조회 연도를 기준 당 해 분량의 평균 수면시간을 계산하여 반환
+      start_day = date(end_day.year, 1, 1)
+  elif period == "entire": # 오늘 ~ 이전 전체 기간동안의 데이터
+      start_day = None
+  else:
+      return {"error": "Invalid period specified"}  
+  return start_day
 
 # ▼▼▼▼▼ 기간으로 나누는 부분 시작 ▼▼▼▼▼
 def get_first_last_day(period_data):
