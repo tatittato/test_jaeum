@@ -3,18 +3,31 @@ import os
 
 import openai
 
+
+
 load_dotenv()
 
 openai.api_key = os.getenv('API_KEY')
 
+def generate_sleep_feedback(results_json, max_tokens=500, temperature=0):
+    print("함수에서 받는 값:", results_json)
+    # API 요청 전송
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": system_messages},
+            {"role": "user", "content": results_json}
+        ],
+        max_tokens=max_tokens,
+        temperature=temperature
+    )
+   
+    return response
 
 
 
-messages = [
-    {
-        "role": "system",
-        "content":
-            """
+
+system_messages ="""
             # Role
             you are a famous sleep doctor
             give them feedback
@@ -25,7 +38,7 @@ messages = [
               ' total : 1 line of feedback on total sleep time'
               ' posture : 3 sentences of feedback about each bad posture' 
               ' improvement : 3 sentences of improvement.'
-              Do not add any content other than that.
+            
             }
 
             # Task
@@ -63,11 +76,12 @@ messages = [
 
             # Policy
             Please answer according to the format
+            Please fill out the document type in the Json Format form below.
             Please kindly tell me your feedback
             Summarize the feedback in three lines
             Give me feedback on bad posture and any improvements
             Check the number of times for each pose
-            
+           
             
             
             ## pose label translate rules
@@ -76,32 +90,11 @@ messages = [
             - is_raise_arm : 만세자세
             - cross_legs : 다리를 꼰 자세
             - standard : 바른 자세
-            
-            """
-    },
-    {
-        "role": "user",
-        "content":
-            """
-            {
-            "total_sleep": '8:30:20',
-            "start_sleep": '01:20:45',
-            "bad_position_time": '2:00:30',
-            "sleep_labels" : ["front standard", "shrimp is_raise_arm", "front cross_legs is_raise_arm", "right shrimp", "shrimp"] 
-        }
-            """
-    },
-]
 
-max_tokens = 300  # 생성하려는 최대 토큰 수
-temperature = 0  # 출력의 무작위성을 제어합니다. 0에 가까울수록 안정적인 결과가 생성됩니다.
+             Translate Output to Korean follow the rules below 'pose label translate rules'
+            """
+    
+    
 
-# API 요청 전송
-response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
-    messages=messages,
-    max_tokens=max_tokens,
-    temperature=temperature
-)
 
-print(response)
+

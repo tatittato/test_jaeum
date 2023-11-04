@@ -25,6 +25,7 @@ class SleepInfo(Base):
     start_sleep_time_score = Column(Integer)
     bad_position_score = Column(Integer)
     position_change_score = Column(Integer) 
+    sleep_feedback = Column(String(1000))
 
 # 수면 이벤트 테이블
 class SleepEvent(Base):

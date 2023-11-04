@@ -76,6 +76,7 @@ async def fetch_timeline_data(date: str, nickname: str, db: Session = Depends(ge
     # `SleepEvent`와 `SleepInfo`를 조인하여 두 조건을 만족하는 데이터만 필터링
     sleep_event_entries = (
         db.query(SleepEvent)
+        .join(User, User.nickname == SleepInfo.nickname)
         .join(SleepInfo, SleepEvent.sleep_info_id == SleepInfo.sleep_info_id)
         .filter(SleepInfo.nickname == nickname, SleepInfo.date == target_date)
         .all()

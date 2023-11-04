@@ -40,7 +40,7 @@
         {% for item in sleep_event_data %}
         <div class="image-div">
             <!-- 이미지 표시 -->
-            <img src="{{ item.event_data_path }}" alt="{{ item.sleep_event }}" width="200" height="200">
+            <img src="/static/images/pose/{{ item.event_data_path }}" alt="{{ item.sleep_event }}" width="200" height="200">
         </div>
         {% endfor %}
       </div>

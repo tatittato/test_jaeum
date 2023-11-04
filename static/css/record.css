@@ -51,6 +51,12 @@ body {
   display: none;
 }
 
+#feedback {
+  font-family: "Cafe24Oneprettynight";
+  text-align: center;
+  color: white; /* 텍스트 색상을 흰색으로 설정 */
+}
+
 h1 {
   font-family: "Cafe24Oneprettynight";
   text-align: center;

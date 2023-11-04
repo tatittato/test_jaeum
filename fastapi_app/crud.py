@@ -82,5 +82,15 @@ def create_sleep_event(db: Session, sleep_event_data: schemas.SleepEventBase):
     db.refresh(db_sleep_event)
     return db_sleep_event
 
+def get_sleep_info_with_events_by_nickname_and_id(db: Session, nickname: str, sleep_info_id: int):
+    return db.query(model.SleepInfo.total_sleep, model.SleepInfo.start_sleep,model.SleepInfo.end_sleep, model.SleepEvent.sleep_event, model.SleepEvent.event_time).\
+        join(model.SleepEvent).\
+        filter(model.SleepInfo.nickname == nickname).\
+        filter(model.SleepInfo.sleep_info_id == sleep_info_id).\
+        filter(model.SleepEvent.sleep_info_id == model.SleepInfo.sleep_info_id).\
+        all()
+
+
+
 
 
