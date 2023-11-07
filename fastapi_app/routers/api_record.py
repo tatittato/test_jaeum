@@ -187,6 +187,16 @@ def update_sleep_score_info(nickname: str, sleep_score_info_data : SleepInfoScor
 
     return update_sleep_score_info
 
+# 수면 피드백 업데이트
+@router.put("/feedback/{nickname}")
+def update_sleep_info_feedback(nickname: str, sleep_info_feedback: SleepInfoFeedback, db: Session = Depends(get_db)):
+
+    update_sleep_feedback = update_info_feedbeck(db, nickname, sleep_info_feedback.sleep_feedback)
+
+    return update_sleep_feedback
+
+
+# 수면 피드백 
 @router.post("/record/info_and_event")
 async def get_info_and_events(request_data: RequestData, db: Session = Depends(get_db) ):
     db_info_event_data = get_sleep_info_with_events_by_nickname_and_id(
@@ -219,7 +229,7 @@ async def get_info_and_events(request_data: RequestData, db: Session = Depends(g
     print("gpt한테 보내주는 값: ", type(json_data))
     # generate_sleep_feedback 함수에 results_text를 전달하여 GPT-3.5 모델에 데이터를 제공
     response = generate_sleep_feedback(json_data)
-    feedback = response["choices"][0]["message"]["content"].replace("\n", "<br>")
+    feedback = response["choices"][0]["message"]["content"].replace("\n", "<br>").replace("{", "").replace("}", "").replace("\"","").replace(",","")
     
     return feedback
 

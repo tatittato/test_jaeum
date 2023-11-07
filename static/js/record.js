@@ -146,6 +146,10 @@ captureButton.addEventListener("click", function () {
 
 // "종료" 버튼 클릭 시 비디오 중지 및 촬영 종료 시간 저장
 endButton.addEventListener("click", function () {
+  const feedbackElement = document.getElementById("feedback");
+  const loaderElement = document.querySelector(".loader");
+  feedbackElement.innerHTML = "오늘의 피드백을 생성중입니다.";
+  loaderElement.style.display = "block";
   if (mediaStream) {
     mediaStream.getTracks().forEach(function (track) {
       track.stop(); // 비디오 스트림 중지
@@ -183,6 +187,7 @@ endButton.addEventListener("click", function () {
       end_sleep: endSleepTime,
       total_sleep: totalSleepTime,
     };
+
     console.log(JSON.stringify(sleepInfoData));
     const sleepInfoJSON = JSON.stringify(sleepInfoData);
 
@@ -230,9 +235,33 @@ endButton.addEventListener("click", function () {
       .then((secondData) => {
         console.log("두 번째 요청으로 받은 데이터:", secondData);
         // 받은 데이터를 처리하거나 표시
+        console.log("두 번째 요청으로 받은 닉네임:", nickname);
         const feedback = secondData;
-        const feedbackElement = document.getElementById("feedback");
-        feedbackElement.textContent = feedback;
+        feedbackElement.innerHTML = feedback;
+        loaderElement.style.display = "none";
+
+        const feedbackData = {
+          nickname: nickname,
+          sleep_feedback: secondData,
+        };
+        return fetch(`/feedback/${nickname}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(feedbackData),
+        });
+      })
+      .then((thirdResponse) => {
+        if (thirdResponse.ok) {
+          return thirdResponse.json();
+        } else {
+          throw new Error("세 번째 요청에 문제가 있습니다.");
+        }
+      })
+      .then((thirdData) => {
+        console.log("세 번째 요청으로 받은 데이터:", thirdData);
+        // Handle the data received from the third request
       })
       .catch((error) => {
         console.error("요청에 문제가 있습니다:", error);

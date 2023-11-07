@@ -47,18 +47,20 @@ def get_durations_pose_times(sleep_event, sleep_event_time, sleep_end_time):
             end_time = sleep_end_time
         else:
             end_time = sleep_event_time[i + 1]
-        
-        start_hour = int(start_time[:2]) 
 
-        if isinstance(end_time, pd.Timestamp):
-            end_hour = end_time.hour
-        elif isinstance(end_time, pd.Series):
-            first_end_time = end_time.iloc[0]
-            if isinstance(first_end_time, str):
-                first_end_time = pd.to_datetime(first_end_time)
-            end_hour = first_end_time.hour
-        else:
-            raise TypeError("end_time은 Timestamp 또는 Series 타입이어야 합니다.")
+        start_hour = int(start_time[:2]) 
+        if isinstance(end_time, pd.Series):
+            end_time1 = end_time.iloc[0]
+            print('end_time자료형 => ', type(end_time))
+            print('end_time1자료형 => ', type(end_time1))
+            end_hour = int(end_time1[:2])
+            print(end_hour)
+            
+        
+
+        
+
+        
 
         if start_hour <= end_hour:
             duration = end_hour - start_hour
