@@ -22,8 +22,8 @@ class SleepInfoScoreUpdate(BaseModel):
     bad_position_score : int
     position_change_score : int   
 
-class SleepInfoFeedbackUpdate(BaseModel):
-    sleep_feedback: str  
+# class SleepInfoFeedbackUpdate(BaseModel):
+#     sleep_feedback: str  
 
 class SleepInfoIdGet(BaseModel):
     nickname: str

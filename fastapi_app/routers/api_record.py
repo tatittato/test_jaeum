@@ -9,6 +9,7 @@ import os
 from fastapi_app.utils.pose_recognize.classify_pose import classify_pose
 from fastapi_app.utils.pose_recognize.detect_pose import detect_pose
 from fastapi_app.utils.pose_recognize.detect_face import detect_face
+from fastapi_app.utils.light.mesure_brigtness import *
 from fastapi_app.utils.openai_prompt import generate_sleep_feedback
 from ..database import SessionLocal, engine
 
@@ -46,8 +47,17 @@ def process_image(image):
     # 캡처한 이미지를 읽습니다.
     image = cv2.imread(file_path)
 
-    # 랜드마크를 감지합니다.
-    response = detect_pose(image, pose, display=False)
+    # 이미지의 밝기 측정
+    brightness = measure_brightness(image)
+
+    # 이미지의 밝기를 조절
+    if brightness < 40 :
+        brightened_image = adjust_brightness_opencv(image, brightness_factor=100)
+
+        # 랜드마크를 감지합니다.
+        response = detect_pose(brightened_image, pose, display=False)
+    else:
+        response = detect_pose(image, pose, display=False) 
 
     if response is not None:
         landmarks_image, landmarks = response
@@ -129,8 +139,18 @@ async def event_image_save(image: UploadFile, data: str = Form(...), sleep_info_
     # 이미지 로드
     image = cv2.imread(file_path)
 
-    # 얼굴 감지 및 픽셀화 처리 함수 호출
-    image = detect_face(image, factor=15)
+    # 이미지의 밝기 측정
+    brightness = measure_brightness(image)
+
+    # 이미지의 밝기를 조절
+    if brightness < 40 :
+        brightened_image = adjust_brightness_opencv(image, brightness_factor=100)
+
+        # 얼굴 감지 및 픽셀화 처리 함수 호출
+        image = detect_face(brightened_image, factor=15)
+    else:
+        # 얼굴 감지 및 픽셀화 처리 함수 호출
+        image = detect_face(image, factor=15)
 
     # 픽셀화 처리한 이미지 저장
     cv2.imwrite(file_path, image)
@@ -229,6 +249,7 @@ async def get_info_and_events(request_data: RequestData, db: Session = Depends(g
     print("gpt한테 보내주는 값: ", type(json_data))
     # generate_sleep_feedback 함수에 results_text를 전달하여 GPT-3.5 모델에 데이터를 제공
     response = generate_sleep_feedback(json_data)
+    # 응답 받은 내용 출력 형식 변경
     feedback = response["choices"][0]["message"]["content"].replace("\n", "<br>").replace("{", "").replace("}", "").replace("\"","").replace(",","")
     
     return feedback

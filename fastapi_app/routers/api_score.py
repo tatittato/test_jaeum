@@ -103,7 +103,7 @@ def minutes_to_hours(minutes):
 async def get_score(request: Request, nickname: str , date : date , db: Session = Depends(get_db)):
 
     sleep_info_datas  = db.query(model.SleepInfo.sleep_info_id, model.SleepInfo.total_sleep, model.SleepInfo.total_sleep_score, model.SleepInfo.position_change_score, \
-                    model.SleepInfo.bad_position_score, model.SleepInfo.sleep_time_score, model.SleepInfo.start_sleep_time_score, model.SleepInfo.start_sleep, model.SleepInfo.end_sleep).filter(model.SleepInfo.nickname == nickname)\
+                    model.SleepInfo.bad_position_score, model.SleepInfo.sleep_time_score, model.SleepInfo.start_sleep_time_score, model.SleepInfo.start_sleep, model.SleepInfo.end_sleep, model.SleepInfo.sleep_feedback).filter(model.SleepInfo.nickname == nickname)\
                     .filter(model.SleepInfo.date == date, model.SleepInfo.nickname == nickname).all()
 
     sleep_event_datas = db.query(model.SleepEvent.sleep_event, model.SleepEvent.event_time)\
@@ -160,6 +160,15 @@ async def get_score(request: Request, nickname: str , date : date , db: Session 
         start_sleep_time = minutes_to_hours(start_minutes_get)
         bad_position_time = minutes_to_hours(bad_position_minutes)
         print('bad_position_time => ', bad_position_time)
+
+        # 'sleep_feedback'이 'SleepInfo' 모델의 속성인 경우
+        sleep_info_instance = db.query(model.SleepInfo).filter(
+            model.SleepInfo.date == date,
+            model.SleepInfo.nickname == nickname
+        ).first()
+
+        # 인스턴스에서 'sleep_feedback' 가져오기
+        sleep_feedback = sleep_info_instance.sleep_feedback
         
         result = {
 
@@ -172,7 +181,8 @@ async def get_score(request: Request, nickname: str , date : date , db: Session 
             "bad_position_score": bad_position_score,
             "sleep_time_score": sleep_time_score,
             "start_sleep_time_score": start_sleep_time_score,
-            "nickname": nickname
+            "nickname": nickname,
+            "sleep_feedback": sleep_feedback
         }
 
         print(result)
