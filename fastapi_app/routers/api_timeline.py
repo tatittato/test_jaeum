@@ -77,7 +77,6 @@ async def fetch_timeline_data(date: str, nickname: str, db: Session = Depends(ge
     # `SleepEvent`와 `SleepInfo`를 조인하여 두 조건을 만족하는 데이터만 필터링
     sleep_event_entries = (
         db.query(SleepEvent)
-
         .join(SleepInfo, SleepEvent.sleep_info_id == SleepInfo.sleep_info_id)
         .filter(SleepInfo.nickname == nickname, SleepInfo.date == target_date)
         .all()
@@ -87,11 +86,11 @@ async def fetch_timeline_data(date: str, nickname: str, db: Session = Depends(ge
         {
             "sleep_event": item.sleep_event,
             "event_time": item.event_time,
-            "event_data_path": "/static/iamges/" + item.event_data_path,
+            "event_data_path": "/static/images/pose/" + item.event_data_path,
         }
         for item in sleep_event_entries
     ]
 
-    # print(sleep_info_data, sleep_event_data)
+    print(sleep_event_data)
 
     return {"sleep_info": sleep_info_data, "sleep_events": sleep_event_data}

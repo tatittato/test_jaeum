@@ -159,6 +159,14 @@ async def get_score(request: Request, nickname: str , date : date , db: Session 
     bad_position_time_hours = bad_position_time[0]
     bad_position_time_minutes = bad_position_time[1]
 
+    # 'sleep_feedback'이 'SleepInfo' 모델의 속성인 경우
+    sleep_info_instance = db.query(model.SleepInfo).filter(
+        model.SleepInfo.date == date,
+        model.SleepInfo.nickname == nickname
+    ).first()
+
+    # 인스턴스에서 'sleep_feedback' 가져오기
+    sleep_feedback = sleep_info_instance.sleep_feedback
 
     result = {
 
@@ -174,7 +182,8 @@ async def get_score(request: Request, nickname: str , date : date , db: Session 
         "bad_position_score": bad_position_score,
         "sleep_time_score": sleep_time_score,
         "start_sleep_time_score": start_sleep_time_score,
-        "nickname": nickname
+        "nickname": nickname,
+        "sleep_feedback": sleep_feedback
     }
 
     print(result)

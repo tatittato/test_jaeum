@@ -20,7 +20,7 @@ def generate_sleep_feedback(results_json, max_tokens=2000, temperature=0):
         ],
         max_tokens=max_tokens,
         temperature=temperature
-    )
+    )    
    
     return response
 
@@ -70,7 +70,7 @@ system_messages ="""
             - Refer to the 'total_sleep' field to create a one-line summary of sleep total_time advice in the output type '총 수면 시간' field.
 
             ## Step 4
-            - Do not display "Irrelevant labels"
+            - Please don't put "irrelevant label"
             - Refer to 'sleep_event' to create the sleep posture received in the output type '수면 자세' field.
 
              ## Step 5
@@ -110,7 +110,7 @@ system_messages ="""
             - Tense muscles may compress blood vessels and nerves, potentially affecting blood circulation and causing symptoms like numbness in the nerves.
             - There's a risk of temporarily narrowed airways, potentially worsening snoring, and possibly leading to gastrointestinal issues like reflux esophagitis.
 
-            ## prone poture
+            ## prone posture
             - Sleeping on your stomach can strain the neck and spine.
             - It may increase pressure on the head and neck, potentially impacting blood circulation.
             - This position can lead to skin irritation, acne, and wrinkles due to contact with the pillow.
@@ -131,6 +131,7 @@ system_messages ="""
 
             - Please answer according to the Ouput Format above.
             - Translate Output to Korean follow the rules below 'pose label translate rules'
+           
             - Do not add any content other than Output Format json above.
             - Exclude "Improvements_to_sleep" about data not included in sleep_event
             - Please refer to the "Contents" and briefly explain why the bad label sleep_event is not good
