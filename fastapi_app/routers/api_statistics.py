@@ -4,7 +4,7 @@ from ..models import statistics_crud
 from ..database import get_db
 from ..schemas import SleepInfoBase, SleepEventBase
 from sqlalchemy.orm import Session
-import numpy as np
+from datetime import date
 from ..utils import statistics_functions
 
 router = APIRouter(
@@ -14,6 +14,8 @@ router = APIRouter(
 
 chart_label = []
 start_day = None
+today = date.today()
+end_day = today
 
 # 리턴타입힌트 정리용 변수처리
 period_return_hint = Dict[str, Union[Dict[str, int], Tuple[int, int, int]]]
@@ -26,7 +28,7 @@ async def get_period_data(period: str, nickname: str, db: Session = Depends(get_
     global start_day
     
     # 7일간 수면현황 + 기간별 수면현황(1주) 에서 사용할 start_day 변수 설정.
-    end_day = statistics_functions.decide_start_day_by_period(period)
+    start_day = statistics_functions.decide_start_day_by_period(period)
     
     # db 데이터 가져오기
     period_data = statistics_crud.get_sleep_data(db=db, start=start_day, end=end_day, nickname=nickname, response_model=SleepInfoBase)

@@ -97,14 +97,7 @@ def is_cross_legs(left_hip_knee_angle, right_hip_knee_angle, labels):
 
   # 뒷모습 일 경우 (뒷모습 백숙함수 호출 및 함수결과 리턴) => 뒷모습일때는 백숙 불가한 것으로 간주한다ㅡㅡ
   if "prone" in labels:
-    # return isCrossLegsProne(left_hip_knee_angle, right_hip_knee_angle, labels)
     return False
-  # if "legs folded - all" not in labels:
-  # 기준 각도가 너무 애매하다 => 다른 방법을 찾는 방안을 생각해보아요
-  # if (270 < left_hip_knee_angle or 270 < right_hip_knee_angle):
-  # if (275 < left_hip_knee_angle or 275 < right_hip_knee_angle):
-  # labels.append("cross legs")	
-  # return True
   else : pass
 
   # 옆모습일때는 백숙 아님
