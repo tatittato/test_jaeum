@@ -72,11 +72,28 @@ function drawChart(data) {
       // 차트에 들어갈 데이터
       labels: [
         //x 축
-
-        ["잠잔 시간 ", +data.total_sleep_time + "시간"],
-        ["나쁜자세로 잔 시간 ", +data.bad_position_time + "시간"],
+        [
+          "잠잔 시간 ",
+          +data.total_sleep_time_hours +
+            "시" +
+            data.total_sleep_time_minutes +
+            "분",
+        ],
+        [
+          "나쁜자세로 잔 시간 ",
+          +data.bad_position_time_hours +
+            "시" +
+            data.bad_position_time_minutes +
+            "분",
+        ],
         ["자세가 바뀐 횟수", +data.position_changes + "회"],
-        ["잠에 든 시간 ", +data.start_sleep_time + "시"],
+        [
+          "잠에 든 시간 ",
+          +data.start_sleep_time_hours +
+            "시" +
+            data.start_sleep_time_minutes +
+            "분",
+        ],
       ],
       datasets: [
         {

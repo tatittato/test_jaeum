@@ -18,17 +18,6 @@ def classify_pose(landmarks, output_image, fps, frame_height, frame_width, displ
     colors = []  # Initialize an empty list for colors
 
     global frame_count
-# 필요 없음
-    # # 코 좌표, x, y
-    # nose_landmark = landmarks[mp_pose.PoseLandmark.NOSE.value]
-
-    # # shoulder의 midpoint x, y, z 좌표
-    # shoulder_x = (landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value][0] + landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value][0]) / 2
-    # shoulder_y = (landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value][1] + landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value][1]) / 2
-    # shoulder_z = (landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value][2] + landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value][2]) / 2
-    
-    # # shoulder x, y, z 좌표를 담은 midpoints 리스트
-    # midpoints = (shoulder_x, shoulder_y, shoulder_z)
 
     # 지윤님 엎드려잠을 위한 z 좌표들
     nose_landmark_z = landmarks[mp_pose.PoseLandmark.NOSE.value][2]

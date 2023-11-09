@@ -10,7 +10,7 @@ mp_pose = mp.solutions.pose
 pose_video = mp_pose.Pose(static_image_mode=False, min_detection_confidence=0.5, model_complexity=1)
 
 # 상위 폴더 설정
-parent_folder = 'Pose'
+parent_folder = 'pose'
 
 # 정답지와 예측 배열 초기화
 ground_truth = []

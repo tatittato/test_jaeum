@@ -29,6 +29,7 @@ def detect_pose(image, pose, display=True):
         # 각 keypoint에 대한 confidence score 출력
         desired_landmarks = [0, 11, 12, 13, 14, 15, 16, 23, 24, 25, 26, 27, 28]
 
+        # 랜드마크의 컨피던스 스코어 출력
         # for idx, landmark in enumerate(results.pose_landmarks.landmark):
         #     if idx in desired_landmarks:
         #         print(

@@ -9,7 +9,7 @@ import os
 from fastapi_app.utils.pose_recognize.classify_pose import classify_pose
 from fastapi_app.utils.pose_recognize.detect_pose import detect_pose
 from fastapi_app.utils.pose_recognize.detect_face import detect_face
-from fastapi_app.utils.light.mesure_brigtness import *
+from fastapi_app.utils.light.brigtness import *
 from fastapi_app.utils.openai_prompt import generate_sleep_feedback
 from ..database import SessionLocal, engine
 

@@ -109,8 +109,6 @@ captureButton.addEventListener("click", function () {
           const sleepInfoIdInput = document.getElementById("sleep_info_id");
           sleepInfoIdInput.value = sleep_info_id;
 
-          // console.log("왜?", (sleepInfoId.value = sleep_info_id));
-
           // 이제 create_sleep_info와 get_info_id가 모두 완료되었음
         })
         .catch(function (error) {

@@ -16,7 +16,7 @@ pose_video = mp_pose.Pose(static_image_mode=True, min_detection_confidence=0.5, 
 
 
 # 이미지 파일이 있는 폴더 경로
-image_folder = 'static/images/Pose/shrimp'
+image_folder = 'static/images/pose/shrimp'
 
 # 이미지 파일 경로 목록을 저장할 리스트 초기화
 image_paths = []
