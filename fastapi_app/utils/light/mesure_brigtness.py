@@ -9,3 +9,7 @@ def measure_brightness(frame):
     # 0~255 범위의 밝기를 1~10 범위의 정수로 정규화
     normalized_brightness = int(round((brightness / 255) * 99 + 1))
     return normalized_brightness
+
+# 밝기 조절2(opencv)
+def adjust_brightness_opencv(img, brightness_factor):
+    return cv2.convertScaleAbs(img, alpha=1, beta=brightness_factor)

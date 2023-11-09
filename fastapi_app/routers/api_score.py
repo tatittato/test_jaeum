@@ -9,7 +9,6 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import desc
 from datetime import datetime, timedelta, date
 import pandas as pd
-from ..utils import openai_prompt
 
 templates = Jinja2Templates(directory="templates")
 
@@ -48,26 +47,32 @@ def get_durations_pose_times(sleep_event, sleep_event_time, sleep_end_time):
             end_time = sleep_end_time
         else:
             end_time = sleep_event_time[i + 1]
-        print("start_time", type(start_time))
-        start_hour = start_time.hour
 
-        if isinstance(end_time, pd.Timestamp):
-            end_hour = end_time.hour
-        elif isinstance(end_time, pd.Series):
-            first_end_time = end_time.iloc[0]
-            if isinstance(first_end_time, str):
-                first_end_time = pd.to_datetime(first_end_time)
-            end_hour = first_end_time.hour
-        else:
-            raise TypeError("end_time은 Timestamp 또는 Series 타입이어야 합니다.")
+        start_hour = int(start_time[:2])
+        print(start_hour)
 
+        end_hour = 0
+        if isinstance(end_time, pd.Series):
+            end_time1 = end_time.iloc[0]
+            print('end_time자료형 => ', type(end_time))
+            print('end_time1자료형 => ', type(end_time1))
+            end_hour = int(end_time1[:2])
+            print(end_hour)
+            
+
+        # 'end_hour' 값을 정의한 후 비교 수행
         if start_hour <= end_hour:
             duration = end_hour - start_hour
+            print("기간",duration,"시작", start_hour,"끝", end_hour)
+            
         else:
             duration = 24 - start_hour + end_hour
+            print("기간",duration,"시작2", start_hour,"끝2", end_hour)
+            
         event_durations[event] = duration
 
     return event_durations
+
 
 def time_to_minutes(time):
     if isinstance (time, pd.Series):
@@ -98,7 +103,7 @@ def minutes_to_hours(minutes):
 async def get_score(request: Request, nickname: str , date : date , db: Session = Depends(get_db)):
 
     sleep_info_datas  = db.query(model.SleepInfo.sleep_info_id, model.SleepInfo.total_sleep, model.SleepInfo.total_sleep_score, model.SleepInfo.position_change_score, \
-                    model.SleepInfo.bad_position_score, model.SleepInfo.sleep_time_score, model.SleepInfo.start_sleep_time_score, model.SleepInfo.start_sleep, model.SleepInfo.end_sleep).filter(model.SleepInfo.nickname == nickname)\
+                    model.SleepInfo.bad_position_score, model.SleepInfo.sleep_time_score, model.SleepInfo.start_sleep_time_score, model.SleepInfo.start_sleep, model.SleepInfo.end_sleep, model.SleepInfo.sleep_feedback).filter(model.SleepInfo.nickname == nickname)\
                     .filter(model.SleepInfo.date == date, model.SleepInfo.nickname == nickname).all()
 
     sleep_event_datas = db.query(model.SleepEvent.sleep_event, model.SleepEvent.event_time)\
@@ -106,26 +111,32 @@ async def get_score(request: Request, nickname: str , date : date , db: Session 
             .filter(model.SleepInfo.date == date, model.SleepInfo.nickname ==  nickname).all()
     
     sleep_info_df = pd.DataFrame(sleep_info_datas)
+    print("sleep_info_df", sleep_info_df)
     sleep_event_df = pd.DataFrame(sleep_event_datas)
-
+    print("sleep_event_df", sleep_event_df)
     if all(len(obj) != 0 for obj in [sleep_info_datas, sleep_event_datas]):
         event_durations = get_durations_pose_times(sleep_event_df['sleep_event'], sleep_event_df['event_time'], sleep_info_df['end_sleep'])
+
         total_duration = 0
-    
+        print("event_durations",event_durations)
         # 이벤트와 각 이벤트의 duration에 대한 정보가 있는 event_durations 딕셔너리 순회
         for event, duration in event_durations.items():
             # 'front standard' 이벤트가 아닌 경우에만 duration을 합산
+            print("event", event)
             if 'front standard' not in event:
                 total_duration += duration
  
         hours = total_duration
+        print("hours",hours)
         time_delta = timedelta(hours=hours)
 
         # timedelta를 문자열로 변환하고, "00:00:00" 형식으로 출력
         time_str = str(time_delta)
 
         badpositiontime = time_str
+        print("badpositiontime", badpositiontime)
         bad_tuple = (badpositiontime,)
+        print("bad_tuple",bad_tuple)
         
         total_sleep_score = int(sleep_info_df['total_sleep_score'].fillna(0).iloc[0])
         position_change_score =int(sleep_info_df['position_change_score'].fillna(0).iloc[0])
@@ -135,18 +146,30 @@ async def get_score(request: Request, nickname: str , date : date , db: Session 
 
         # 자세 바뀐 횟수 가져오기
         position_changes = len(sleep_event_df)
+        print('position_changes => ', position_changes)
 
         # timedf['total_sleep']
         sleep_minutes_get =  time_to_minutes(pd.to_datetime(sleep_info_df['total_sleep'])) # total_sleep
+        print('sleep_minutes_get => ', sleep_minutes_get)
         start_minutes_get = time_to_minutes(pd.to_datetime(sleep_info_df['total_sleep'])) # start_sleep
         bad_position_minutes = time_to_minutes(bad_tuple)
+        print('bad_position_minutes => ',bad_position_minutes)
 
         total_sleep_time = minutes_to_hours(sleep_minutes_get)
+        print('total_sleep_time => ', total_sleep_time)
         start_sleep_time = minutes_to_hours(start_minutes_get)
         bad_position_time = minutes_to_hours(bad_position_minutes)
-        
-        #"total_sleep" "start_sleep" "bad_position_time" "sleep_labels" 
+        print('bad_position_time => ', bad_position_time)
 
+        # 'sleep_feedback'이 'SleepInfo' 모델의 속성인 경우
+        sleep_info_instance = db.query(model.SleepInfo).filter(
+            model.SleepInfo.date == date,
+            model.SleepInfo.nickname == nickname
+        ).first()
+
+        # 인스턴스에서 'sleep_feedback' 가져오기
+        sleep_feedback = sleep_info_instance.sleep_feedback
+        
         result = {
 
             "position_changes": position_changes,
@@ -158,16 +181,12 @@ async def get_score(request: Request, nickname: str , date : date , db: Session 
             "bad_position_score": bad_position_score,
             "sleep_time_score": sleep_time_score,
             "start_sleep_time_score": start_sleep_time_score,
-            "nickname": nickname
+            "nickname": nickname,
+            "sleep_feedback": sleep_feedback
         }
 
-        dict_variables = {"total_sleep": pd.to_datetime(sleep_info_df['total_sleep'].fillna(0).iloc[0]),
-                            "start_sleep": pd.to_datetime(sleep_info_df['start_sleep'].fillna(0).iloc[0])
-                            }
-        feedbacks = openai_prompt.get_sleep_feedbacks_gpt(dict_variables)
-        print(feedbacks)
         print(result)
-    return JSONResponse(content=result)
+        return JSONResponse(content=result)
 
 
 @router.get("/score/{nickname}")
@@ -198,7 +217,7 @@ async def calculate_score(request: Request, nickname: str , db: Session = Depend
     
     sleep_end_time = db.query(model.SleepInfo.end_sleep).filter(model.SleepInfo.nickname == nickname).order_by(desc(model.SleepInfo.sleep_info_id)).first()
 
-    print(sleep_event, sleep_event_time ,sleep_end_time)
+    print("dd???",sleep_event, sleep_event_time ,sleep_end_time)
 
 
     # sleep_event와 각 이벤트의 시작 및 종료 시간

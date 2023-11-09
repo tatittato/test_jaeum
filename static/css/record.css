@@ -50,6 +50,39 @@ body {
 #backgroundMusic {
   display: none;
 }
+.feedbackcontainer {
+  display: flex;
+  align-items: center; /* 요소들을 세로 가운데 정렬 */
+  justify-content: center;
+}
+
+.loader {
+  display: none;
+  border: 4px solid rgb(250, 248, 248);
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#feedback {
+  font-family: "Cafe24Oneprettynight";
+
+  text-align: center;
+  color: white;
+  margin-right: 10px; /* 로더와 간격을 주기 위한 마진 설정 */
+  margin-top: 15px;
+}
 
 h1 {
   font-family: "Cafe24Oneprettynight";

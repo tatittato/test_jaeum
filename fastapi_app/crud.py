@@ -69,6 +69,19 @@ def update_score_info(db: Session, nickname: str, total_sleep_score : int, sleep
                 db.commit()
                 db.refresh(db_sleep_info)
                 return db_sleep_info
+            
+def update_info_feedbeck(db: Session, nickname: str, sleep_feedback: str):
+    # 가장 마지막 sleep_info_id 가져오기
+    latest_sleep_info_id = db.query(func.max(model.SleepInfo.sleep_info_id)).filter(model.SleepInfo.nickname == nickname).scalar()
+
+    if latest_sleep_info_id is not None:
+        # 해당 sleep_info_id를 사용하여 업데이트
+        db_sleep_info = db.query(model.SleepInfo).filter(model.SleepInfo.sleep_info_id == latest_sleep_info_id).first()
+        if db_sleep_info:
+            db_sleep_info.sleep_feedback = sleep_feedback
+            db.commit()
+            db.refresh(db_sleep_info)
+            return db_sleep_info
 
 def create_sleep_event(db: Session, sleep_event_data: schemas.SleepEventBase):
     db_sleep_event = model.SleepEvent(
@@ -81,6 +94,16 @@ def create_sleep_event(db: Session, sleep_event_data: schemas.SleepEventBase):
     db.commit()
     db.refresh(db_sleep_event)
     return db_sleep_event
+
+def get_sleep_info_with_events_by_nickname_and_id(db: Session, nickname: str, sleep_info_id: int):
+    return db.query(model.SleepInfo.total_sleep, model.SleepInfo.start_sleep,model.SleepInfo.end_sleep, model.SleepEvent.sleep_event, model.SleepEvent.event_time).\
+        join(model.SleepEvent).\
+        filter(model.SleepInfo.nickname == nickname).\
+        filter(model.SleepInfo.sleep_info_id == sleep_info_id).\
+        filter(model.SleepEvent.sleep_info_id == model.SleepInfo.sleep_info_id).\
+        all()
+
+
 
 
 

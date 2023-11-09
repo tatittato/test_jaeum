@@ -14,7 +14,7 @@ let latestPosture = null;
 let changedPostureCount = 0;
 let changingPosture = null;
 
-const nickname = localStorage.getItem('nickname');
+const nickname = localStorage.getItem("nickname");
 console.log("home에서 로컬에 저장한 닉넴", nickname);
 
 // 촬영 시작 및 종료 시간을 Date 객체로 변환
@@ -106,9 +106,6 @@ captureButton.addEventListener("click", function () {
           // 서버에서 받은 sleep_info_id 값을 가져온다고 가정
           const sleep_info_id = getInfoIdData.sleep_info_id;
 
-          // const sleepInfoIdParagraph = document.getElementById("sleep_info_id");
-          // sleepInfoIdParagraph.textContent = sleep_info_id;
-
           const sleepInfoIdInput = document.getElementById("sleep_info_id");
           sleepInfoIdInput.value = sleep_info_id;
 
@@ -140,7 +137,7 @@ captureButton.addEventListener("click", function () {
       //   ).src = `static/music/${randomMusic}`;
       // }, 10000); // 10000 밀리초(10초) 후에 실행
 
-      intervalId = setInterval(captureAndUploadFrame, 1000);
+      intervalId = setInterval(captureAndUploadFrame, 5000);
     })
     .catch(function (error) {
       console.error("웹 카메라 액세스 오류:", error);
@@ -149,6 +146,10 @@ captureButton.addEventListener("click", function () {
 
 // "종료" 버튼 클릭 시 비디오 중지 및 촬영 종료 시간 저장
 endButton.addEventListener("click", function () {
+  const feedbackElement = document.getElementById("feedback");
+  const loaderElement = document.querySelector(".loader");
+  feedbackElement.innerHTML = "오늘의 피드백을 생성중입니다.";
+  loaderElement.style.display = "block";
   if (mediaStream) {
     mediaStream.getTracks().forEach(function (track) {
       track.stop(); // 비디오 스트림 중지
@@ -172,30 +173,26 @@ endButton.addEventListener("click", function () {
     const endTime = new Date(captureEndTime);
     const endSleepTime = formatTime(endTime);
 
-    // 촬영 시작 및 종료 시간을 초로 변환
     const startTimeInSeconds = Math.floor(captureStartTime.getTime() / 1000);
     const endTimeInSeconds = Math.floor(captureEndTime.getTime() / 1000);
 
-    // total_sleep 계산
     const totalSleepInSeconds = endTimeInSeconds - startTimeInSeconds;
     const totalSleepTime = secondsToHMS(totalSleepInSeconds);
 
-    // 데이터를 JSON 형식으로 준비
     const urlParams = new URLSearchParams(window.location.search);
-    const nickname = urlParams.get("nickname"); // URL에서 닉네임 가져오기
+    const nickname = urlParams.get("nickname");
 
     const sleepInfoData = {
       nickname: nickname,
       end_sleep: endSleepTime,
       total_sleep: totalSleepTime,
     };
+
     console.log(JSON.stringify(sleepInfoData));
-    // 데이터를 JSON 문자열로 변환
     const sleepInfoJSON = JSON.stringify(sleepInfoData);
 
-    // 서버로 닉네임, 촬영종료시간, 총 시간 데이터를 JSON 형태로 전송
     fetch(`/record/update/${nickname}`, {
-      method: "PUT", // PUT 메서드 사용
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -204,52 +201,71 @@ endButton.addEventListener("click", function () {
       .then(function (response) {
         if (response.ok) {
           console.log("촬영 정보가 서버로 전송되었습니다.");
-          return fetchData();
+          return response.json(); // 첫 번째 요청이 완료되면 응답을 반환
         } else {
           console.error("촬영 정보 전송 실패", response);
         }
       })
-      .catch(function (error) {
-        console.error("촬영 정보 전송 중 오류 발생:", error);
-      });
-
-    async function fetchData() {
-      try {
-        const response = await fetch(`/score/${nickname}`, {
-          method: "get",
+      .then((data) => {
+        fetchData();
+        // 첫 번째 요청이 완료된 후에 두 번째 세션 요청을 수행
+        console.log("받은 데이터:", data);
+        console.log("닉네임 값:", nickname);
+        const sleepInfoId = document.getElementById("sleep_info_id").value;
+        console.log("수면정보아이디 값", sleepInfoId);
+        const requestData = {
+          nickname: nickname,
+          sleep_info_id: sleepInfoId,
+        };
+        return fetch("/record/info_and_event", {
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify(requestData),
         });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+      })
+      .then((secondResponse) => {
+        if (secondResponse.ok) {
+          return secondResponse.json();
+        } else {
+          throw new Error("두 번째 요청에 문제가 있습니다.");
         }
+      })
+      .then((secondData) => {
+        console.log("두 번째 요청으로 받은 데이터:", secondData);
+        // 받은 데이터를 처리하거나 표시
+        console.log("두 번째 요청으로 받은 닉네임:", nickname);
+        const feedback = secondData;
+        feedbackElement.innerHTML = feedback;
+        loaderElement.style.display = "none";
 
-        const responseData = await response.json();
-        console.log(responseData);
-
-        fetch(`/record/update/score/${nickname}`, {
-          method: "PUT", // PUT 메서드 사용
+        const feedbackData = {
+          nickname: nickname,
+          sleep_feedback: secondData,
+        };
+        return fetch(`/feedback/${nickname}`, {
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(responseData),
-        })
-          .then(function (response) {
-            if (response.ok) {
-              console.log("수면 점수가 저장되었습니다");
-            } else {
-              console.error("수면 점수 전송 실패", response);
-            }
-          })
-          .catch(function (error) {
-            console.error("수면 점수 전송중 오류 발생:", error);
-          });
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
+          body: JSON.stringify(feedbackData),
+        });
+      })
+      .then((thirdResponse) => {
+        if (thirdResponse.ok) {
+          return thirdResponse.json();
+        } else {
+          throw new Error("세 번째 요청에 문제가 있습니다.");
+        }
+      })
+      .then((thirdData) => {
+        console.log("세 번째 요청으로 받은 데이터:", thirdData);
+        // Handle the data received from the third request
+      })
+      .catch((error) => {
+        console.error("요청에 문제가 있습니다:", error);
+      });
   }
 });
 
@@ -307,6 +323,7 @@ function sendImageToServer(formData) {
       console.log("이전 자세:", latestPosture);
       // 이전 자세와 현재 자세를 비교하여 로직을 추가합니다.
       if (latestPosture == null) {
+        callSavePostureApi(formData, data);
         // 최근 자세 정보 업데이트
         latestPosture = currentPosture;
       }
@@ -362,4 +379,49 @@ function callSavePostureApi(imageData, data) {
     .catch(function (error) {
       console.error("Error saving the image:", error);
     });
+}
+
+// 점수 저장함수
+async function fetchData() {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await fetch(`/score/${nickname}`, {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      console.log("responseData", responseData);
+
+      fetch(`/record/update/score/${nickname}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(responseData),
+      })
+        .then(function (response) {
+          if (response.ok) {
+            console.log("수면 점수가 저장되었습니다");
+            resolve(); // Promise가 성공했음을 알림
+          } else {
+            console.error("수면 점수 전송 실패", response);
+            reject(); // Promise가 실패했음을 알림
+          }
+        })
+        .catch(function (error) {
+          console.error("수면 점수 전송중 오류 발생:", error);
+          reject(); // Promise가 실패했음을 알림
+        });
+    } catch (error) {
+      console.error("Error:", error);
+      reject(); // Promise가 실패했음을 알림
+    }
+  });
 }

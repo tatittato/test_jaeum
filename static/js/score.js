@@ -57,6 +57,8 @@ document.getElementById("selectedDate").addEventListener("change", function () {
       document.getElementById("sleep_score").textContent =
         data.total_sleep_score;
       document.getElementById("nickname").textContent = data.nickname;
+      const feedbackElement = document.getElementById("scoreFeedback");
+      feedbackElement.innerHTML = data.sleep_feedback;
     });
 });
 
